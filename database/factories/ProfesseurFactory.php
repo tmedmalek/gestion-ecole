@@ -31,7 +31,7 @@ class ProfesseurFactory extends Factory
             'salaire' => fake()->numerify(),
             'specialite' => fake()->jobTitle(),
             'remember_token' => Str::random(10),
-            'dob' => fake()->date(),
+            'date_naissance' => fake()->date(),
         ];
     }
 }

@@ -14,4 +14,16 @@ class classe extends Model
         'debut_annee_scolaire',
         'fin_annee_scolaire',
     ];
+    public function Eleves()
+    {
+        return $this->hasMany(Eleve::class);
+    }
+    public function Seances()
+    {
+        return $this->hasMany(seance::class);
+    }
+    public function Professeurs()
+    {
+        return $this->belongsToMany(Professeur::class, 'clases_profs');
+    }
 }

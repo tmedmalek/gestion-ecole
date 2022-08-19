@@ -14,4 +14,19 @@ class seance extends Model
         'heure_debut',
         'heure_fen',
     ];
+
+    public function classe()
+    {
+        return $this->belongsTo(classe::class);
+    }
+
+    public function matiere_prof()
+    {
+        return $this->belongsTo(matiere_prof::class);
+    }
+
+    public function eleves()
+    {
+        return $this->belongsToMany(Eleve::class);
+    }
 }

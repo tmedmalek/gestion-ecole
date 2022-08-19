@@ -16,7 +16,13 @@ class EleveController extends Controller
      */
     public function index()
     {
-        return EleveResource::collection(Eleve::all());
+        return response(
+            [
+                'success' => 1,
+                'data' => EleveResource::collection(Eleve::all())
+            ],
+            201
+        );
     }
 
     /**
@@ -34,7 +40,6 @@ class EleveController extends Controller
         }
 
         $eleve = Eleve::create($request->validated());
-
         return response(['success' => 1, 'message' => 'eleve is create'], 201);
     }
 
@@ -50,7 +55,13 @@ class EleveController extends Controller
         if (is_null($eleve)) {
             return response(['success' => -1, 'message' => 'is not found'], 200);
         }
-        return new EleveResource($eleve);
+        return response(
+            [
+                'success' => 1,
+                'data' => new EleveResource($eleve)
+            ],
+            201
+        );
     }
 
     /**
@@ -66,11 +77,11 @@ class EleveController extends Controller
         if (is_null($eleve)) {
             return response(['success' => -1, 'message' => 'is not found'], 200);
         }
-        $eleve_by_name = Eleve::where('first_name', $request->first_name)->first(); 
+
+        $eleve_by_name = Eleve::where('first_name', $request->first_name)->first();
         if (isset($eleve_by_name) && $eleve_by_name->id !== $eleve->id) {
             return response(['success' => -2, 'message' => 'name existe'], 200);
         }
-
 
         $eleve->update($request->only([
             'first_name',
@@ -87,7 +98,8 @@ class EleveController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    {  $eleve = Eleve::where('id', $id)->first();
+    {
+        $eleve = Eleve::where('id', $id)->first();
         if (is_null($eleve)) {
             return response(['success' => -1, 'message' => 'is not found'], 200);
         }

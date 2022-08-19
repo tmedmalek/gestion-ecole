@@ -21,6 +21,7 @@ return new class extends Migration
             $table->date('date');
             $table->date('heure_debut');
             $table->date('heure_fin');
+            $table->integer('nb_places')->nullable();
             $table->timestamps();
         });
     }

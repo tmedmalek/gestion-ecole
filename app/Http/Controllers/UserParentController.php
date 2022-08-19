@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreProfesseurRequest;
 use App\Http\Resources\ProfesseurResource;
-use App\Models\Professeur;
+use App\Http\Resources\UserParentResource;
+use App\Models\UserParent;
 use Illuminate\Http\Request;
 
-class ProfesseurController extends Controller
+class UserParentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,10 +16,23 @@ class ProfesseurController extends Controller
      */
     public function index()
     {
-        return response([
-            'success' => 1,
-            'data' => ProfesseurResource::collection(Professeur::all())
-        ]);
+        return response(
+            [
+                'success' => 1,
+                'data' => UserParentResource::collection(UserParent::all())
+            ],
+            201
+        );
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
     }
 
     /**
@@ -28,18 +41,9 @@ class ProfesseurController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreProfesseurRequest $request)
+    public function store(Request $request)
     {
-        $professeur = Professeur::firstWhere('email', $request->email);
-
-        if (isset($professeur)) {
-            return response(['success' => -1, 'message' => 'professeur is existe'], 200);
-        }
-
-        $data = $request->validated();
-        $data['password'] = bcrypt($data['password']);
-        $professeur = Professeur::create($data);
-        return response(['success' => 1, 'message' => 'professeur is create'], 201);
+        //
     }
 
     /**
@@ -50,17 +54,28 @@ class ProfesseurController extends Controller
      */
     public function show($id)
     {
-        $professeur = Professeur::firstwhere('id', $id);
-        if (is_null($professeur)) {
+        $UserParent = UserParent::firstwhere('id', $id);
+        if (is_null($UserParent)) {
             return response(['success' => -1, 'message' => 'is not found'], 200);
         }
         return response(
             [
                 'success' => 1,
-                'data' => new ProfesseurResource($professeur)
+                'data' => new UserParentResource($UserParent)
             ],
             201
         );
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
     }
 
     /**
@@ -83,12 +98,13 @@ class ProfesseurController extends Controller
      */
     public function destroy($id)
     {
-        $professeur = Professeur::where('id', $id)->first();
-        if (is_null($professeur)) {
+
+        $UserParent = UserParent::where('id', $id)->first();
+        if (is_null($UserParent)) {
             return response(['success' => -1, 'message' => 'is not found'], 200);
         }
 
-        $professeur->delete();
-        return response(['success' => 1, 'message' => 'professeur is deleted'], 201);
+        $UserParent->delete();
+        return response(['success' => 1, 'message' => 'UserParent is deleted'], 201);
     }
 }

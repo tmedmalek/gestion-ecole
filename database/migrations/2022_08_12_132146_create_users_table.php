@@ -15,19 +15,21 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('dob')->nullable();
+            $table->string('first_name');
+            $table->string('last_name');
+            $table->integer('cin')->nullable();
+            $table->string('nationality')->nullable();
+            $table->timestamp('date_naissance')->nullable();
+            $table->string('lieu_naissance')->nullable();
             $table->string('street')->nullable();
             $table->string('city')->nullable();
             $table->string('gouverneant')->nullable();
             $table->integer('zipcode')->nullable();
-            $table->string('first_name');
-            $table->string('last_name');
             $table->string('email')->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->string('type')->nullable();
             $table->integer('mobile')->nullable();
-            $table->integer('cin')->nullable();
             $table->date('annee_afectation')->nullable();
             $table->string('diplome')->nullable();
             $table->string('grade')->nullable();

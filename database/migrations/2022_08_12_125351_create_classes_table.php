@@ -15,10 +15,9 @@ return new class extends Migration
     {
         Schema::create('classes', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->unique();
             $table->string('niveau_scolaire');
-            $table->date('debut_annee_scolaire');
-            $table->date('fin_annee_scolaire');
+            $table->string('type_niveau');
             $table->timestamps();
         });
     }

@@ -8,7 +8,18 @@ use Illuminate\Database\Eloquent\Model;
 class trimestre extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'annee_scolaire',
     ];
+
+    public function eleves()
+    {
+        return $this->belongsToMany(Eleve::class, 'frais_scolaire');
+    }
+
+    public function notes()
+    {
+        return $this->hasMany(note::class);
+    }
 }

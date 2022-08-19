@@ -15,9 +15,10 @@ return new class extends Migration
     {
         Schema::create('seances', function (Blueprint $table) {
             $table->id();
-            $table->date('date_seance');
-            $table->date('heure_debut');
-            $table->date('heure_fin');
+            $table->date('date_seance')->nullable();
+            $table->date('heure_debut')->nullable();
+            $table->date('heure_fin')->nullable();
+            $table->string('type')->nullable();
             $table->unsignedBigInteger('classe_id');
             $table->foreign('classe_id')->references('id')->on('classes');
             $table->unsignedBigInteger('matiere_prof_id');

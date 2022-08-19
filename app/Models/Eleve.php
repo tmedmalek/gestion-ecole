@@ -10,4 +10,34 @@ class Eleve extends User
 {
     use HasParent;
     use HasFactory;
+
+    public function classe()
+    {
+        return $this->belongsTo(classe::class);
+    }
+
+    public function userparent()
+    {
+        return $this->belongsTo(UserParent::class);
+    }
+
+    public function evenements()
+    {
+        return $this->belongsToMany(evenement::class, 'participations');
+    }
+
+    public function matieres()
+    {
+        return $this->belongsToMany(matiere::class, 'notes');
+    }
+
+    public function seances()
+    {
+        return $this->belongsToMany(seance::class, 'absence');
+    }
+
+    public function trimestes()
+    {
+        return $this->belongsToMany(trimestre::class, 'frais_scolaire');
+    }
 }

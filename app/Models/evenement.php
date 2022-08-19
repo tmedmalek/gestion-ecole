@@ -16,4 +16,9 @@ class evenement extends Model
         'heure_debut',
         'heure_fin',
     ];
+
+    public function eleves()
+    {
+        return $this->belongsToMany(Eleve::class, 'participations');
+    }
 }
