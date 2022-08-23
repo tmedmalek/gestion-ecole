@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class trimestre extends Model
+class Trimestre extends Model
 {
     use HasFactory;
 
@@ -20,6 +20,6 @@ class trimestre extends Model
 
     public function notes()
     {
-        return $this->hasMany(note::class);
+        return $this->hasMany(Note::class);
     }
 }

@@ -70,9 +70,38 @@ class ProfesseurController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreProfesseurRequest $request, $id)
     {
-        //
+        $Professeur = Professeur::where('id', $id)->first();
+        if (is_null($Professeur)) {
+            return response(['success' => -1, 'message' => 'is not found'], 200);
+        }
+
+        $Professeur = Professeur::where('email', $request->email)->first();
+        if (isset($Professeur) && $Professeur->id !== $Professeur->id) {
+            return response(['success' => -2, 'message' => 'email existe'], 200);
+        }
+
+        $Professeur->update(
+        'first_name',
+        'last_name',
+        'date_naissance',
+        'type',
+        'email',
+        'mobile',
+        'adresse',
+        'cin',
+        'annee_afectation',
+        'diplome',
+        'grade',
+        'salaire',
+        'specialite',
+        'street',
+        'city',
+        'gouverneant',
+        'zipcode',
+        );
+        return response(['success' => 1, 'message' => 'Professeur is updated'], 201);
     }
 
     /**

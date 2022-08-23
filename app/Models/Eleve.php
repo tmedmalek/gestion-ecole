@@ -13,7 +13,7 @@ class Eleve extends User
 
     public function classe()
     {
-        return $this->belongsTo(classe::class);
+        return $this->belongsTo(Classe::class);
     }
 
     public function userparent()
@@ -23,21 +23,21 @@ class Eleve extends User
 
     public function evenements()
     {
-        return $this->belongsToMany(evenement::class, 'participations');
+        return $this->belongsToMany(Evenement::class, 'participations');
     }
 
     public function matieres()
     {
-        return $this->belongsToMany(matiere::class, 'notes');
+        return $this->belongsToMany(Matiere::class, 'notes');
     }
 
     public function seances()
     {
-        return $this->belongsToMany(seance::class, 'absence');
+        return $this->belongsToMany(Seance::class, 'absence');
     }
 
     public function trimestes()
     {
-        return $this->belongsToMany(trimestre::class, 'frais_scolaire');
+        return $this->belongsToMany(Trimestre::class, 'frais_scolaire');
     }
 }

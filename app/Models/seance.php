@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class seance extends Model
+class Seance extends Model
 {
     use HasFactory;
     protected $fillable = [
@@ -17,12 +17,12 @@ class seance extends Model
 
     public function classe()
     {
-        return $this->belongsTo(classe::class);
+        return $this->belongsTo(Classe::class);
     }
 
     public function matiere_prof()
     {
-        return $this->belongsTo(matiere_prof::class);
+        return $this->belongsTo(MatiereProf::class);
     }
 
     public function eleves()

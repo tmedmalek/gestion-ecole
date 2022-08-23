@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class classe extends Model
+class Classe extends Model
 {
     use HasFactory;
     protected $fillable = [
@@ -20,7 +20,7 @@ class classe extends Model
     }
     public function Seances()
     {
-        return $this->hasMany(seance::class);
+        return $this->hasMany(Seance::class);
     }
     public function Professeurs()
     {

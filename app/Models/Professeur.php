@@ -13,12 +13,12 @@ class Professeur extends User
 
     public function matieres()
     {
-        return $this->belongsToMany(matiere::class, 'matiere_prof');
+        return $this->belongsToMany(Matiere::class, 'matiere_prof');
     }
 
     public function classes()
     {
-        return $this->belongsToMany(classe::class, 'classes_profs');
+        return $this->belongsToMany(Classe::class, 'classes_profs');
     }
 
     public function userparents()

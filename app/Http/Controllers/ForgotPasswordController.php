@@ -3,48 +3,32 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreForgotPasswordRequest;
-use App\Mail\ResetPasword;
-use App\Models\password_resets;
-use App\Models\User;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Password;
-
-use function PHPUnit\Framework\isNull;
+use App\Http\Requests\StoreVerifyTokenRequest;
+use App\Services\ForgotPasswordService;
 
 class ForgotPasswordController extends Controller
 {
-    public function forgotpassword(StoreForgotPasswordRequest $request)
+    private $ForgotPasswordService;
+
+    public function __construct(ForgotPasswordService $ForgotPasswordService)
     {
-
-        // bech nthabtou l email mawjoud fel DB walal le 
-        $user = User::firstwhere('email', $request->email);
-        if (is_null($user)) {
-            return response(['success' => -1, 'message' => 'is not found'], 200);
-        }
-        // ken mawjoud ngenriw token
-        // nsobou  return response(['success' => -1, 'message' => 'is not found'], 200);token w el email fi Reset Password table
-
-        password_resets::updateOrCreate(
-            ['email' => $request->email],
-            [
-                'token' => Str::random(64)
-            ]
-        );
-
-        Mail::to($request->email)->send(new ResetPasword());
-
-        return response(['success' => 1, 'message' => 'mail ressu'], 201);
-
-
-        // nab3tho mail lel user fih (link fornt) + token + email 
+        $this->ForgotPasswordService = $ForgotPasswordService;
     }
 
-    public function verifytoken(StoreForgotPasswordRequest $request)
+    public function ForgotPassword(StoreForgotPasswordRequest $request)
     {
-        //return  password_resets::all();
-        // t thabet email w token mawjoudin fel DB walla le 
-        $resetpass = password_resets::firstWhere(['email' => $request->email, 'token' => $request->token]);
+        $token = $this->ForgotPasswordService->forgotpassword($request->validated());
+        if (isset($token)) {
+            return response(['success' => 1, 'message' => 'email sended'], 200);
+        }
+        return response(['success' => -1, 'message' => 'fqsdfsqfqs'], 200);
+    }
+
+
+
+    public function Verifytoken(StoreVerifyTokenRequest $request)
+    {
+        $resetpass = $this->ForgotPasswordService->verifytoken($request->validated());
         if (isset($resetpass)) {
             return response(['succes' => 1, 'message' => 'token is valide'], 201);
         }

@@ -3,22 +3,22 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class ResetPasword extends Mailable
+class updatepassword extends Mailable
 {
     use Queueable, SerializesModels;
 
-    private $url;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($url)
+    public function __construct()
     {
-        $this->url = $url;
+        //
     }
 
     /**
@@ -28,7 +28,6 @@ class ResetPasword extends Mailable
      */
     public function build()
     {
-        return $this->markdown('forget_mail')
-            ->with(['url' => $this->url]);
+        return $this->view('reset');
     }
 }

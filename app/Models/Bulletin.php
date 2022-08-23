@@ -11,6 +11,6 @@ class Bulletin extends Model
 
     public function notes()
     {
-        return $this-> hasMany(note::class);
+        return $this-> hasMany(Note::class);
     }
 }

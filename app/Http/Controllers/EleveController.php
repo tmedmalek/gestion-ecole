@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreEleveRequest;
 use App\Http\Resources\EleveResource;
 use App\Models\Eleve;
-use Illuminate\Http\Request;
+
 
 class EleveController extends Controller
 {
