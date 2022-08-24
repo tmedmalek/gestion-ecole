@@ -24,9 +24,20 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+
+        Passport::tokensCan(
+            [
+                'place-order' => 'scope for orders',
+                'eleve' => 'scope for orders',
+                'professeur' => 'scope for orders',
+                'userparent' => 'scope for orders',
+                'admin' => 'scope for orders'
+
+            ]
+        );
         $this->registerPolicies();
 
-        if (! $this->app->routesAreCached()) {
+        if (!$this->app->routesAreCached()) {
             Passport::routes();
         }
     }

@@ -39,7 +39,7 @@ class User extends Authenticatable
         'city',
         'gouverneant',
         'zipcode',
-    
+
     ];
 
     /**
@@ -55,6 +55,7 @@ class User extends Authenticatable
         'eleve' => Eleve::class,
         'professeur' => Professeur::class,
         'userparent' => UserParent::class,
+        'admin' => Admin::class,
     ];
 
     /**
@@ -64,8 +65,8 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'date_naissance'=>'datetime',
-        'annee_afectation'=>'datetime',
+        'date_naissance' => 'datetime',
+        'annee_afectation' => 'datetime',
     ];
 
     public function validateForPassportPasswordGrant($password)

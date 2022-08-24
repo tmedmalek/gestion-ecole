@@ -15,6 +15,10 @@ class Eleve extends User
     {
         return $this->belongsTo(Classe::class);
     }
+    public function admin()
+    {
+        return $this->belongsTo(Admin::class);
+    }
 
     public function userparent()
     {

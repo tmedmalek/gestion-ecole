@@ -15,6 +15,10 @@ class Professeur extends User
     {
         return $this->belongsToMany(Matiere::class, 'matiere_prof');
     }
+    public function admin()
+    {
+        return $this->belongsTo(Admin::class, 'matiere_prof');
+    }
 
     public function classes()
     {

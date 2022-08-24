@@ -13,14 +13,12 @@ class AuthService
         if (isset($user)) {
             $response = Http::asForm()->post(url('/oauth/token'), [
                 'grant_type' => 'password',
-                'client_id' => '2',
-                'client_secret' => '3rNTMRNa0rqwz0UKNATjbNIjC6M8uC1nT5V4TNGV',
+                'client_id' => '97197531-a0ac-4360-bb8b-e4a6ebb46b2e',
+                'client_secret' => '1CwG3k3qKebBYI8xVRXhfSAWDaMGEWoVE9lqSIFE',
                 'username' => $data['email'],
                 'password' => $data['password'],
-                'scope' => '*'
-
+                'scope' => $user->type
             ]);
-
             if ($response->status() == 200)
                 return json_decode($response->body());
         }

@@ -2,15 +2,12 @@
 
 namespace App\Services;
 
-use App\Http\Requests\StoreForgotPasswordRequest;
 use App\Mail\ResetPasword;
 use App\Mail\updatepassword;
 use App\Models\PasswordResets;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
-
-use function PHPUnit\Framework\isNull;
 
 class ForgotPasswordService
 {

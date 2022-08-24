@@ -5,10 +5,17 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreProfesseurRequest;
 use App\Http\Resources\ProfesseurResource;
 use App\Models\Professeur;
-use Illuminate\Http\Request;
+use App\Services\ProfesseurService;
 
 class ProfesseurController extends Controller
 {
+
+    private $ProfesseurService;
+
+    public function __construct(ProfesseurService $ProfesseurService)
+    {
+        $this->ProfesseurService = $ProfesseurService;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -30,16 +37,12 @@ class ProfesseurController extends Controller
      */
     public function store(StoreProfesseurRequest $request)
     {
-        $professeur = Professeur::firstWhere('email', $request->email);
-
+        $professeur = $this->ProfesseurService->store($request->validated());
         if (isset($professeur)) {
-            return response(['success' => -1, 'message' => 'professeur is existe'], 200);
+            return response(['success' => 1, 'message' => 'professeur is create'], 201);
         }
-
-        $data = $request->validated();
-        $data['password'] = bcrypt($data['password']);
-        $professeur = Professeur::create($data);
-        return response(['success' => 1, 'message' => 'professeur is create'], 201);
+        return response(['success' => -1, 'message' => 'professeur is existe'], 200);
+        
     }
 
     /**
@@ -83,25 +86,25 @@ class ProfesseurController extends Controller
         }
 
         $Professeur->update(
-        'first_name',
-        'last_name',
-        'date_naissance',
-        'type',
-        'email',
-        'mobile',
-        'adresse',
-        'cin',
-        'annee_afectation',
-        'diplome',
-        'grade',
-        'salaire',
-        'specialite',
-        'street',
-        'city',
-        'gouverneant',
-        'zipcode',
+            'first_name',
+            'last_name',
+            'date_naissance',
+            'type',
+            'email',
+            'mobile',
+            'adresse',
+            'cin',
+            'annee_afectation',
+            'diplome',
+            'grade',
+            'salaire',
+            'specialite',
+            'street',
+            'city',
+            'gouverneant',
+            'zipcode',
         );
-        return response(['success' => 1, 'message' => 'Professeur is updated'], 201);
+        return response(['success' => 1, 'message' => 'professeur is updated'], 201);
     }
 
     /**

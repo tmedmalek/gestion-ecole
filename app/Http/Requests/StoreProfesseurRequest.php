@@ -15,6 +15,7 @@ class StoreProfesseurRequest extends FormRequest
      */
     public function authorize()
     {
+        //return $this->user()->tokenCan('place-orders');
         return true;
     }
 

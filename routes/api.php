@@ -28,7 +28,7 @@ Route::prefix('eleves')->controller(EleveController::class)->group(function () {
     Route::delete('/{id}', 'destroy');
 });
 
-Route::prefix('professeurs')->controller(ProfesseurController::class)->middleware('auth:api')->group(function () {
+Route::prefix('professeurs')->controller(ProfesseurController::class)->middleware(['auth:api', 'scopes:admin'])->group(function () {
     Route::get('', 'index');
     Route::get('/{id}', 'show');
     Route::post('', 'store');
