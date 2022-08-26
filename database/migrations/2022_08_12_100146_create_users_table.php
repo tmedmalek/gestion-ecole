@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('first_name');
             $table->string('last_name');
-            $table->integer('cin')->nullable();
+            $table->integer('cin')->unique()->nullable();
             $table->string('nationality')->nullable();
             $table->timestamp('date_naissance')->nullable();
             $table->string('lieu_naissance')->nullable();

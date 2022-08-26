@@ -39,6 +39,7 @@ class User extends Authenticatable
         'city',
         'gouverneant',
         'zipcode',
+        'classe_id',
 
     ];
 

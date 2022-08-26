@@ -11,13 +11,18 @@ class Note extends Model
 
     protected $fillable = [
         'note',
+        'eleve_id',
+        'matiere_id',
+        'bulletin_id',
+        'trimestre_id',
+
     ];
 
     public function trimestre()
     {
         return $this->belongsTo(Trimestre::class);
     }
-    
+
 
     public function bulletin()
     {

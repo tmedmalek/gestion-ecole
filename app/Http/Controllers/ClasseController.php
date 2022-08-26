@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreEleveRequest;
-use App\Http\Resources\EleveResource;
-use App\Models\Eleve;
-use App\Services\EleveService;
+use App\Http\Requests\StoreClasseRequest;
+use App\Http\Resources\ClasseResource;
+use App\Models\Classe;
+use App\Services\ClasseService;
+use Illuminate\Http\Request;
 
-class EleveController extends Controller
+class ClasseController extends Controller
 {
-    private $EleveService;
+    private $ClasseService;
 
-    public function __construct(EleveService $EleveService)
+    public function __construct(ClasseService $ClasseService)
     {
-        $this->EleveService = $EleveService;
+        $this->ClasseService = $ClasseService;
     }
     /**
      * Display a listing of the resource.
@@ -25,7 +26,7 @@ class EleveController extends Controller
         return response(
             [
                 'success' => 1,
-                'data' => EleveResource::collection(Eleve::all())
+                'data' => ClasseResource::collection(Classe::all())
             ],
             201
         );
@@ -37,14 +38,14 @@ class EleveController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreEleveRequest $request)
+    public function store(StoreClasseRequest $request)
     {
-        $eleve =  $this->EleveService->store($request->validated());
+        $classe =  $this->ClasseService->store($request->validated());
 
-        if (is_null($eleve)) {
-            return response(['success' => -1, 'message' => 'eleve is existe'], 200);
+        if (is_null($classe)) {
+            return response(['success' => -1, 'message' => 'classe is existe'], 200);
         }
-        return response(['success' => 1, 'message' => 'eleve is create'], 201);
+        return response(['success' => 1, 'message' => 'classe is create'], 201);
     }
 
     /**
@@ -55,14 +56,14 @@ class EleveController extends Controller
      */
     public function show($id)
     {
-        $eleve = Eleve::firstwhere('id', $id);
-        if (is_null($eleve)) {
+        $classe = Classe::firstwhere('id', $id);
+        if (is_null($classe)) {
             return response(['success' => -1, 'message' => 'is not found'], 200);
         }
         return response(
             [
                 'success' => 1,
-                'data' => new EleveResource($eleve)
+                'data' => new ClasseResource($classe)
             ],
             201
         );
@@ -75,13 +76,13 @@ class EleveController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreEleveRequest $request, $id)
+    public function update(Request $request, $id)
     {
-        $eleve =  $this->EleveService->update($request->validated(), $id);
-        if (is_null($eleve)) {
+        $classe =  $this->ClasseService->update($request->validated(), $id);
+        if (is_null($classe)) {
             return response(['success' => -1, 'message' => 'is not found'], 200);
         }
-        return response(['success' => 1, 'message' => 'Eleve is updated'], 201);
+        return response(['success' => 1, 'message' => 'classe is updated'], 201);
     }
 
     /**
@@ -92,12 +93,12 @@ class EleveController extends Controller
      */
     public function destroy($id)
     {
-        $eleve = Eleve::where('id', $id)->first();
-        if (is_null($eleve)) {
+        $classe = Classe::where('id', $id)->first();
+        if (is_null($classe)) {
             return response(['success' => -1, 'message' => 'is not found'], 200);
         }
 
-        $eleve->delete();
-        return response(['success' => 1, 'message' => 'eleve is deleted'], 201);
+        $classe->delete();
+        return response(['success' => 1, 'message' => 'classe is deleted'], 201);
     }
 }

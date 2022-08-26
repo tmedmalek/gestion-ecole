@@ -19,6 +19,6 @@ class Evenement extends Model
 
     public function eleves()
     {
-        return $this->belongsToMany(Eleve::class, 'participations');
+        return $this->belongsToMany(Eleve::class, 'participations','evnement_id','eleve_id');
     }
 }

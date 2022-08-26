@@ -2,8 +2,11 @@
 
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ClasseController;
 use App\Http\Controllers\EleveController;
 use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\MatiereController;
+use App\Http\Controllers\NoteController;
 use App\Http\Controllers\ProfesseurController;
 use App\Http\Controllers\ResetPasswordController;
 use Illuminate\Http\Request;
@@ -20,7 +23,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix('eleves')->controller(EleveController::class)->group(function () {
+Route::prefix('eleves')->controller(EleveController::class)->middleware(['auth:api', 'scopes:admin'])->group(function () {
     Route::get('', 'index');
     Route::get('/{id}', 'show');
     Route::post('', 'store');
@@ -29,6 +32,13 @@ Route::prefix('eleves')->controller(EleveController::class)->group(function () {
 });
 
 Route::prefix('professeurs')->controller(ProfesseurController::class)->middleware(['auth:api', 'scopes:admin'])->group(function () {
+    Route::get('', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('', 'store');
+    Route::put('/{id}', 'update');
+    Route::delete('/{id}', 'destroy');
+});
+Route::prefix('parents')->controller(ProfesseurController::class)->middleware(['auth:api', 'scopes:admin'])->group(function () {
     Route::get('', 'index');
     Route::get('/{id}', 'show');
     Route::post('', 'store');
@@ -57,4 +67,25 @@ Route::prefix('verifytoken')->controller(ForgotPasswordController::class)->group
 Route::prefix('resetpassword')->controller(ResetPasswordController::class)->group(function () {
     Route::post('', 'ResetPassword');
 });
- 
+
+Route::prefix('notes')->controller(NoteController::class)->group(function () {
+    Route::get('', 'index');
+});
+
+
+Route::prefix('classes')->controller(ClasseController::class)->middleware(['auth:api', 'scopes:admin'])->group(function () {
+    Route::get('', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('', 'store');
+    Route::put('/{id}', 'update');
+    Route::delete('/{id}', 'destroy');
+});
+
+Route::prefix('matieres')->controller(MatiereController::class)->middleware(['auth:api', 'scopes:admin'])->group(function () {
+    Route::get('', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('', 'store');
+    Route::put('/{id}', 'update');
+    Route::delete('/{id}', 'destroy');
+});
+

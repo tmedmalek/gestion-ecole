@@ -3,13 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUserParentRequest;
-use App\Http\Resources\ProfesseurResource;
 use App\Http\Resources\UserParentResource;
 use App\Models\UserParent;
-use Illuminate\Http\Request;
+use App\Services\UserParentService;
 
 class UserParentController extends Controller
 {
+
+    private $UserParentService;
+
+    public function __construct(UserParentService $UserParentService)
+    {
+        $this->UserParentService = $UserParentService;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -44,13 +50,11 @@ class UserParentController extends Controller
      */
     public function store(StoreUserParentRequest $request)
     {
-        $UserParent = UserParent::firstWhere('email', $request->email);
+        $UserParent = $this->UserParentService->store($request->validate());
 
         if (isset($UserParent)) {
             return response(['success' => -1, 'message' => 'UserParent is existe'], 200);
         }
-
-        $UserParent = UserParent::create($request->validated());
         return response(['success' => 1, 'message' => 'UserParent is create'], 201);
     }
 
@@ -96,35 +100,10 @@ class UserParentController extends Controller
      */
     public function update(StoreUserParentRequest $request, $id)
     {
-        $UserParent = UserParent::where('id', $id)->first();
+        $UserParent = $this->UserParentService->update($request->validate(), $id);
         if (is_null($UserParent)) {
             return response(['success' => -1, 'message' => 'is not found'], 200);
         }
-
-        $UserParent = UserParent::where('email', $request->email)->first();
-        if (isset($UserParent) && $UserParent->id !== $UserParent->id) {
-            return response(['success' => -2, 'message' => 'email existe'], 200);
-        }
-
-        $UserParent->update(
-            'first_name',
-            'last_name',
-            'date_naissance',
-            'type',
-            'email',
-            'mobile',
-            'adresse',
-            'cin',
-            'annee_afectation',
-            'diplome',
-            'grade',
-            'salaire',
-            'specialite',
-            'street',
-            'city',
-            'gouverneant',
-            'zipcode',
-        );
         return response(['success' => 1, 'message' => 'parent is updated'], 201);
     }
 

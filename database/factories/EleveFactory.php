@@ -21,7 +21,7 @@ class EleveFactory extends Factory
 
             'first_name' => fake()->name(),
             'last_name' => fake()->name(),
-             'dob' => fake()->date(),
+            'date_naissance' => fake()->date(),
             'remember_token' => Str::random(10),
         ];
     }

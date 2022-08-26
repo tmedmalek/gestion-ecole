@@ -42,6 +42,7 @@ class StoreProfesseurRequest extends FormRequest
             'specialite' => 'required|min:5|max:30',
             'city' => 'required|min:5|max:30',
             'zipcode' => 'required',
+            'classe_id' => 'string',
             'gouverneant' => [
                 'required',
                 Rule::in([
@@ -57,6 +58,7 @@ class StoreProfesseurRequest extends FormRequest
                     'bizert',
                     'mednin',
                 ]),
+
             ],
 
 

@@ -24,6 +24,6 @@ class Classe extends Model
     }
     public function Professeurs()
     {
-        return $this->belongsToMany(Professeur::class, 'clases_profs');
+        return $this->belongsToMany(Professeur::class, 'clases_profs','classe_id','professeur_id');
     }
 }

@@ -16,7 +16,7 @@ class UserParentResource extends JsonResource
     {  return[
         'fist_name'=>$this->fist_name,
         'last_name'=>$this->last_name,
-        'dob'=>$this->dob,
+        'date_naissance'=>$this->date_naissance,
         'type'=>$this->type,
         'email'=>$this->email,
         'password'=>$this->password,

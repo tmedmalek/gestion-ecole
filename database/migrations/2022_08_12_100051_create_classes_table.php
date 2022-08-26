@@ -17,7 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->string('niveau_scolaire');
-            $table->string('type_niveau');
+            $table->string('debut_annee_scolaire')->nullable();
+            $table->date('fin_annee_scolaire')->nullable();
             $table->timestamps();
         });
     }

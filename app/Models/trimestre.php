@@ -15,7 +15,7 @@ class Trimestre extends Model
 
     public function eleves()
     {
-        return $this->belongsToMany(Eleve::class, 'frais_scolaire');
+        return $this->belongsToMany(Eleve::class, 'frais_scolaire','trimeste_id','eleve_id');
     }
 
     public function notes()

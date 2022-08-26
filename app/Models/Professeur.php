@@ -13,7 +13,7 @@ class Professeur extends User
 
     public function matieres()
     {
-        return $this->belongsToMany(Matiere::class, 'matiere_prof');
+        return $this->belongsToMany(Matiere::class, 'matiere_prof','professeur_id','matiere_id');
     }
     public function admin()
     {
@@ -22,11 +22,11 @@ class Professeur extends User
 
     public function classes()
     {
-        return $this->belongsToMany(Classe::class, 'classes_profs');
+        return $this->belongsToMany(Classe::class, 'classes_profs','professeur_id','classe_id');
     }
 
     public function userparents()
     {
-        return $this->belongsToMany(UserParent::class, 'appointment');
+        return $this->belongsToMany(UserParent::class, 'appointment','professeur_id','userparent_id');
     }
 }

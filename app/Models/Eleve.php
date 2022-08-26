@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Parental\HasParent;
 
 class Eleve extends User
@@ -27,21 +26,21 @@ class Eleve extends User
 
     public function evenements()
     {
-        return $this->belongsToMany(Evenement::class, 'participations');
+        return $this->belongsToMany(Evenement::class, 'participations','eleve_id','evenement_id');
     }
 
     public function matieres()
     {
-        return $this->belongsToMany(Matiere::class, 'notes');
+        return $this->belongsToMany(Matiere::class, 'notes','eleve_id','note_id');
     }
 
     public function seances()
     {
-        return $this->belongsToMany(Seance::class, 'absence');
+        return $this->belongsToMany(Seance::class, 'absence','eleve_id','seance_id');
     }
 
     public function trimestes()
     {
-        return $this->belongsToMany(Trimestre::class, 'frais_scolaire');
+        return $this->belongsToMany(Trimestre::class, 'frais_scolaire','eleve_id','trimeste_id');
     }
 }

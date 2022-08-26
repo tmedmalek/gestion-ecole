@@ -27,6 +27,6 @@ class Seance extends Model
 
     public function eleves()
     {
-        return $this->belongsToMany(Eleve::class);
+        return $this->belongsToMany(Eleve::class, 'absence', 'seance_id', 'eleve_id');
     }
 }

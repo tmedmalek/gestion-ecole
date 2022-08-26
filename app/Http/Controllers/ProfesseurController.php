@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProfesseurRequest;
 use App\Http\Resources\ProfesseurResource;
+use App\Http\Resources\ProfesseurResourceCollection;
+use App\Models\Classe;
 use App\Models\Professeur;
 use App\Services\ProfesseurService;
 
@@ -25,7 +27,7 @@ class ProfesseurController extends Controller
     {
         return response([
             'success' => 1,
-            'data' => ProfesseurResource::collection(Professeur::all())
+            'data' => new ProfesseurResourceCollection(Professeur::all())
         ]);
     }
 
@@ -42,7 +44,6 @@ class ProfesseurController extends Controller
             return response(['success' => 1, 'message' => 'professeur is create'], 201);
         }
         return response(['success' => -1, 'message' => 'professeur is existe'], 200);
-        
     }
 
     /**
@@ -75,35 +76,11 @@ class ProfesseurController extends Controller
      */
     public function update(StoreProfesseurRequest $request, $id)
     {
-        $Professeur = Professeur::where('id', $id)->first();
-        if (is_null($Professeur)) {
+        $professeur = $this->ProfesseurService->update($request->validated(), $id);
+
+        if (is_null($professeur)) {
             return response(['success' => -1, 'message' => 'is not found'], 200);
         }
-
-        $Professeur = Professeur::where('email', $request->email)->first();
-        if (isset($Professeur) && $Professeur->id !== $Professeur->id) {
-            return response(['success' => -2, 'message' => 'email existe'], 200);
-        }
-
-        $Professeur->update(
-            'first_name',
-            'last_name',
-            'date_naissance',
-            'type',
-            'email',
-            'mobile',
-            'adresse',
-            'cin',
-            'annee_afectation',
-            'diplome',
-            'grade',
-            'salaire',
-            'specialite',
-            'street',
-            'city',
-            'gouverneant',
-            'zipcode',
-        );
         return response(['success' => 1, 'message' => 'professeur is updated'], 201);
     }
 

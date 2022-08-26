@@ -18,7 +18,7 @@ class UserParent extends User
 
     public function professers()
     {
-        return $this->hasMany(Professeur::class);
+        return $this->belongsToMany(Professeur::class, 'appointment','userparent_id','professeur_id');
     }
 
 }
