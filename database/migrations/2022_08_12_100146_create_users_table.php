@@ -35,10 +35,13 @@ return new class extends Migration
             $table->string('grade')->nullable();
             $table->double('salaire')->nullable();
             $table->string('specialite')->nullable();
+            $table->string('matricule')->unique()->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->unsignedBigInteger('classe_id')->nullable();
             $table->foreign('classe_id')->references('id')->on('classes');
+            $table->unsignedBigInteger('parent_id')->nullable();
+            $table->foreign('parent_id')->references('id')->on('users');
         });
     }
 

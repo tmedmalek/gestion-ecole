@@ -5,8 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
-
-class StoreProfesseurRequest extends FormRequest
+class UpdateProfesseurRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -15,7 +14,6 @@ class StoreProfesseurRequest extends FormRequest
      */
     public function authorize()
     {
-        //return $this->user()->tokenCan('place-orders');
         return true;
     }
 
@@ -27,25 +25,24 @@ class StoreProfesseurRequest extends FormRequest
     public function rules()
     {
         return [
-            'first_name' => 'required|min:5|max:30|string',
-            'last_name' => 'required|min:5|max:30|string',
-            'date_naissance' => 'required|date',
-            'email' => 'required|email',
-            'password' => 'required',
-            'mobile' => 'required|numeric|digits:8',
-            'street' => 'required|min:5|max:30|string',
-            'cin' => 'required|numeric|digits:8',
-            'annee_afectation' => 'required|date',
-            'diplome' => 'required|min:5|max:30|string',
-            'grade' => 'required|min:5|max:30|string',
-            'salaire' => 'required|numeric',
-            'specialite' => 'required|min:5|max:30',
-            'city' => 'required|min:5|max:30',
-            'zipcode' => 'required',
+            'first_name' => 'min:5|max:30|string',
+            'last_name' => 'min:5|max:30|string',
+            'date_naissance' => 'date',
+            'email' => 'email',
+            'password' => '',
+            'mobile' => 'numeric|digits:8',
+            'street' => 'min:5|max:30|string',
+            'cin' => 'numeric|digits:8',
+            'annee_afectation' => 'date',
+            'diplome' => 'min:5|max:30|string',
+            'grade' => 'min:5|max:30|string',
+            'salaire' => 'numeric',
+            'specialite' => 'string|min:5|max:30',
+            'city' => 'string|min:5|max:30',
+            'zipcode' => '',
             'matieres' => 'array',
             'matieres.*' => 'numeric',
             'gouverneant' => [
-                'required',
                 Rule::in([
                     'tunis',
                     'manouba',

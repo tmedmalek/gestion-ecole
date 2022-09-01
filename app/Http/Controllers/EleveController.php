@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreEleveRequest;
+use App\Http\Requests\UpdateEleveRequest;
 use App\Http\Resources\EleveResource;
+use App\Http\Resources\EleveResourceCollection;
 use App\Models\Eleve;
 use App\Services\EleveService;
 
@@ -25,7 +27,7 @@ class EleveController extends Controller
         return response(
             [
                 'success' => 1,
-                'data' => EleveResource::collection(Eleve::all())
+                'data' =>new EleveResourceCollection(Eleve::all())
             ],
             201
         );
@@ -39,11 +41,7 @@ class EleveController extends Controller
      */
     public function store(StoreEleveRequest $request)
     {
-        $eleve =  $this->EleveService->store($request->validated());
-
-        if (is_null($eleve)) {
-            return response(['success' => -1, 'message' => 'eleve is existe'], 200);
-        }
+        $this->EleveService->store($request->validated());
         return response(['success' => 1, 'message' => 'eleve is create'], 201);
     }
 
@@ -55,10 +53,8 @@ class EleveController extends Controller
      */
     public function show($id)
     {
-        $eleve = Eleve::firstwhere('id', $id);
-        if (is_null($eleve)) {
-            return response(['success' => -1, 'message' => 'is not found'], 200);
-        }
+
+        $eleve = $this->EleveService->eleveNOtExiste($id);
         return response(
             [
                 'success' => 1,
@@ -75,12 +71,9 @@ class EleveController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreEleveRequest $request, $id)
+    public function update(UpdateEleveRequest $request, $id)
     {
-        $eleve =  $this->EleveService->update($request->validated(), $id);
-        if (is_null($eleve)) {
-            return response(['success' => -1, 'message' => 'is not found'], 200);
-        }
+        $this->EleveService->update($request->validated(), $id);
         return response(['success' => 1, 'message' => 'Eleve is updated'], 201);
     }
 
@@ -92,11 +85,7 @@ class EleveController extends Controller
      */
     public function destroy($id)
     {
-        $eleve = Eleve::where('id', $id)->first();
-        if (is_null($eleve)) {
-            return response(['success' => -1, 'message' => 'is not found'], 200);
-        }
-
+        $eleve = $this->EleveService->eleveNOtExiste($id);
         $eleve->delete();
         return response(['success' => 1, 'message' => 'eleve is deleted'], 201);
     }

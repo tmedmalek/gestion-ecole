@@ -1,31 +1,31 @@
 <?php
 
-namespace TimWassenburg\ServiceGenerator\Console;
+namespace App\Console\Commands;
 
 use Illuminate\Console\GeneratorCommand;
 
-class MakeService extends GeneratorCommand
+class MakeTrait extends GeneratorCommand
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'make:service {name}';
+    protected $signature = 'make:trait {name}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create a new service class';
+    protected $description = 'Create a new traits class';
 
     /**
      * The type of class being generated.
      *
      * @var string
      */
-    protected $type = 'Service';
+    protected $type = 'Traits';
 
     /**
      * Get the stub file for the generator.
@@ -34,7 +34,7 @@ class MakeService extends GeneratorCommand
      */
     protected function getStub()
     {
-        return __DIR__ . '/../../stubs/service.stub';
+        return __DIR__ . '/../../stubs/trait.stub';
     }
 
     /**
@@ -45,6 +45,6 @@ class MakeService extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace . '\Services';
+        return $rootNamespace . '\Traits';
     }
 }

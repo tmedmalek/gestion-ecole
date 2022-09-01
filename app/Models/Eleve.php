@@ -14,33 +14,40 @@ class Eleve extends User
     {
         return $this->belongsTo(Classe::class);
     }
+
+
     public function admin()
     {
         return $this->belongsTo(Admin::class);
     }
 
+
     public function userparent()
     {
-        return $this->belongsTo(UserParent::class);
+        return $this->belongsTo(UserParent::class, 'parent_id');
     }
+
 
     public function evenements()
     {
-        return $this->belongsToMany(Evenement::class, 'participations','eleve_id','evenement_id');
+        return $this->belongsToMany(Evenement::class, 'participations', 'eleve_id', 'evenement_id');
     }
+
 
     public function matieres()
     {
-        return $this->belongsToMany(Matiere::class, 'notes','eleve_id','note_id');
+        return $this->belongsToMany(Matiere::class, 'notes', 'eleve_id', 'note_id');
     }
+
 
     public function seances()
     {
-        return $this->belongsToMany(Seance::class, 'absence','eleve_id','seance_id');
+        return $this->belongsToMany(Seance::class, 'absence', 'eleve_id', 'seance_id');
     }
+
 
     public function trimestes()
     {
-        return $this->belongsToMany(Trimestre::class, 'frais_scolaire','eleve_id','trimeste_id');
+        return $this->belongsToMany(Trimestre::class, 'frais_scolaire', 'eleve_id', 'trimeste_id');
     }
 }

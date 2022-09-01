@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProfesseurRequest;
+use App\Http\Requests\UpdateProfesseurRequest;
 use App\Http\Resources\ProfesseurResource;
 use App\Http\Resources\ProfesseurResourceCollection;
-use App\Models\Classe;
 use App\Models\Professeur;
 use App\Services\ProfesseurService;
 
@@ -18,6 +18,8 @@ class ProfesseurController extends Controller
     {
         $this->ProfesseurService = $ProfesseurService;
     }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -31,6 +33,7 @@ class ProfesseurController extends Controller
         ]);
     }
 
+
     /**
      * Store a newly created resource in storage.
      *
@@ -39,11 +42,8 @@ class ProfesseurController extends Controller
      */
     public function store(StoreProfesseurRequest $request)
     {
-        $professeur = $this->ProfesseurService->store($request->validated());
-        if (isset($professeur)) {
-            return response(['success' => 1, 'message' => 'professeur is create'], 201);
-        }
-        return response(['success' => -1, 'message' => 'professeur is existe'], 200);
+        $this->ProfesseurService->store($request->validated());
+        return response(['success' => 1, 'message' => 'professeur is create'], 201);
     }
 
     /**
@@ -54,10 +54,7 @@ class ProfesseurController extends Controller
      */
     public function show($id)
     {
-        $professeur = Professeur::firstwhere('id', $id);
-        if (is_null($professeur)) {
-            return response(['success' => -1, 'message' => 'is not found'], 200);
-        }
+        $professeur = $this->ProfesseurService->getProf($id);
         return response(
             [
                 'success' => 1,
@@ -67,6 +64,7 @@ class ProfesseurController extends Controller
         );
     }
 
+
     /**
      * Update the specified resource in storage.
      *
@@ -74,15 +72,12 @@ class ProfesseurController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreProfesseurRequest $request, $id)
+    public function update(UpdateProfesseurRequest $request, $id)
     {
-        $professeur = $this->ProfesseurService->update($request->validated(), $id);
-
-        if (is_null($professeur)) {
-            return response(['success' => -1, 'message' => 'is not found'], 200);
-        }
+        $this->ProfesseurService->update($request->validated(), $id);
         return response(['success' => 1, 'message' => 'professeur is updated'], 201);
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -92,12 +87,9 @@ class ProfesseurController extends Controller
      */
     public function destroy($id)
     {
-        $professeur = Professeur::where('id', $id)->first();
-        if (is_null($professeur)) {
-            return response(['success' => -1, 'message' => 'is not found'], 200);
-        }
-
+        $professeur = $this->ProfesseurService->getProf($id);
+        $this->ProfesseurService->destroyMatiere($id);
         $professeur->delete();
-        return response(['success' => 1, 'message' => 'professeur is deleted'], 201);
+        return  response(['success' => 1, 'message' => 'professeur is deleted'], 201);
     }
 }

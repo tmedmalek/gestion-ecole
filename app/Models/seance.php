@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Seance extends Model
 {
     use HasFactory;
+
+
     protected $fillable = [
         'date',
         'date_seance',
@@ -15,15 +17,18 @@ class Seance extends Model
         'heure_fen',
     ];
 
+
     public function classe()
     {
         return $this->belongsTo(Classe::class);
     }
 
+
     public function matiere_prof()
     {
         return $this->belongsTo(MatiereProf::class);
     }
+
 
     public function eleves()
     {

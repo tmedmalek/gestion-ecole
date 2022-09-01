@@ -23,6 +23,7 @@ class EleveFactory extends Factory
             'last_name' => fake()->name(),
             'date_naissance' => fake()->date(),
             'remember_token' => Str::random(10),
+            'matricule'=>Str::random(10),
         ];
     }
 }

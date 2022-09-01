@@ -33,8 +33,8 @@ class ProfesseurResource extends JsonResource
             'city' => $this->city,
             'gouverneant' => $this->gouverneant,
             'zipcode' => $this->zipcode,
-            'classes' => $this->classes
-           
+            'matieres' => new MatiereResourceCollection($this->matieres)
+
         ];
     }
 }

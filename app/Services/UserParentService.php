@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\NotFoundException;
 use App\Models\UserParent;
 
 /**
@@ -11,29 +12,49 @@ class UserParentService
 {
     public function store($data)
     {
-        $UserParent = UserParent::firstWhere('email', $data['email']);
-
-        if (isset($UserParent)) {
-            return null;
-        }
-
+        $this->checkEmailUnique($data['email']);
+        $this->checkCinUnique($data['cin']);
         $UserParent = UserParent::create($data);
         return $UserParent;
     }
 
+
     public function update($data, $id)
     {
-        $UserParent = UserParent::where('id', $id)->first();
-        if (is_null($UserParent)) {
-            return null;
-        }
+        $parent = $this->getparent($id);
+        $this->checkCinUnique($data['cin']);
+        $this->checkEmailUnique($data['email']);
+        $parent->update($data);
+        return $parent;
+    }
 
-        $UserParent = UserParent::where('email', $data['email'])->first();
-        if (isset($UserParent) && $UserParent->id !== $UserParent->id) {
-            return null;
-        }
 
-        $UserParent->update($data);
-        return $UserParent;
+
+    public function checkCinUnique($cin)
+    {
+
+        $parent = UserParent::where('cin', $cin)->first();
+        if (isset($parent)) {
+            throw new NotFoundException(['code' => -2, 'message' => 'parent_cin existe']);
+        }
+        return $parent;
+    }
+
+    public function checkEmailUnique($email)
+    {
+        $parent = UserParent::where('email', $email)->first();
+        if (isset($parent)) {
+            throw new NotFoundException(['code' => -3, 'message' => 'parent_email existe']);
+        }
+        return $parent;
+    }
+
+    public function getparent($id)
+    {
+        $parent = UserParent::firstWhere('id', $id);
+        if (is_null($parent)) {
+            throw new NotFoundException(['code' => -1, 'messege' => 'parent not found']);
+        }
+        return $parent;
     }
 }

@@ -40,8 +40,11 @@ class User extends Authenticatable
         'gouverneant',
         'zipcode',
         'classe_id',
+        'parent_id',
+        'matricule'
 
     ];
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -52,12 +55,15 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+
     protected $childTypes = [
         'eleve' => Eleve::class,
         'professeur' => Professeur::class,
         'userparent' => UserParent::class,
         'admin' => Admin::class,
     ];
+
 
     /**
      * The attributes that should be cast.
@@ -69,6 +75,7 @@ class User extends Authenticatable
         'date_naissance' => 'datetime',
         'annee_afectation' => 'datetime',
     ];
+
 
     public function validateForPassportPasswordGrant($password)
     {

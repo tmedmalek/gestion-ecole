@@ -9,7 +9,7 @@ use App\Http\Controllers\MatiereController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\ProfesseurController;
 use App\Http\Controllers\ResetPasswordController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\UserParentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -38,7 +38,7 @@ Route::prefix('professeurs')->controller(ProfesseurController::class)->middlewar
     Route::put('/{id}', 'update');
     Route::delete('/{id}', 'destroy');
 });
-Route::prefix('parents')->controller(ProfesseurController::class)->middleware(['auth:api', 'scopes:admin'])->group(function () {
+Route::prefix('parents')->controller(UserParentController::class)->middleware(['auth:api', 'scopes:admin'])->group(function () {
     Route::get('', 'index');
     Route::get('/{id}', 'show');
     Route::post('', 'store');

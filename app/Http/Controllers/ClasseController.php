@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreClasseRequest;
-use App\Http\Resources\ClasseResource;
+use App\Http\Resources\ClasseResource\ClasseResource;
+use App\Http\Resources\ClasseResource\ClasseResourceCollection;
 use App\Models\Classe;
 use App\Services\ClasseService;
 use Illuminate\Http\Request;
@@ -26,7 +27,7 @@ class ClasseController extends Controller
         return response(
             [
                 'success' => 1,
-                'data' => ClasseResource::collection(Classe::all())
+                'data' => new ClasseResourceCollection(Classe::all())
             ],
             201
         );
@@ -40,11 +41,7 @@ class ClasseController extends Controller
      */
     public function store(StoreClasseRequest $request)
     {
-        $classe =  $this->ClasseService->store($request->validated());
-
-        if (is_null($classe)) {
-            return response(['success' => -1, 'message' => 'classe is existe'], 200);
-        }
+        $this->ClasseService->store($request->validated());
         return response(['success' => 1, 'message' => 'classe is create'], 201);
     }
 
@@ -56,14 +53,11 @@ class ClasseController extends Controller
      */
     public function show($id)
     {
-        $classe = Classe::firstwhere('id', $id);
-        if (is_null($classe)) {
-            return response(['success' => -1, 'message' => 'is not found'], 200);
-        }
+       $classe = $this->ClasseService->checkClasseNotExiste($id);
         return response(
             [
                 'success' => 1,
-                'data' => new ClasseResource($classe)
+                'data' => new ClasseResourceCollection($classe)
             ],
             201
         );
@@ -78,10 +72,7 @@ class ClasseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $classe =  $this->ClasseService->update($request->validated(), $id);
-        if (is_null($classe)) {
-            return response(['success' => -1, 'message' => 'is not found'], 200);
-        }
+        $this->ClasseService->update($request->validated(), $id);
         return response(['success' => 1, 'message' => 'classe is updated'], 201);
     }
 
@@ -93,11 +84,7 @@ class ClasseController extends Controller
      */
     public function destroy($id)
     {
-        $classe = Classe::where('id', $id)->first();
-        if (is_null($classe)) {
-            return response(['success' => -1, 'message' => 'is not found'], 200);
-        }
-
+        $classe = $this->ClasseService->checkClasseNotExiste($id);
         $classe->delete();
         return response(['success' => 1, 'message' => 'classe is deleted'], 201);
     }

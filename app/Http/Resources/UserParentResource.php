@@ -14,7 +14,7 @@ class UserParentResource extends JsonResource
      */
     public function toArray($request)
     {  return[
-        'fist_name'=>$this->fist_name,
+        'first_name'=>$this->first_name,
         'last_name'=>$this->last_name,
         'date_naissance'=>$this->date_naissance,
         'type'=>$this->type,
@@ -27,6 +27,7 @@ class UserParentResource extends JsonResource
         'city'=>$this->city,
         'gouverneant'=>$this->gouverneant,
         'zipcode'=>$this->zipcode,
+        // 'eleves'=> new EleveResourceCollection($this->eleves)
 
     ];
     }
