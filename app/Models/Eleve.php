@@ -28,9 +28,9 @@ class Eleve extends User
     }
 
 
-    public function evenements()
+    public function events()
     {
-        return $this->belongsToMany(Evenement::class, 'participations', 'eleve_id', 'evenement_id');
+        return $this->belongsToMany(Evenement::class, 'participations', 'eleve_id', 'event_id');
     }
 
 

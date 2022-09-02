@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreClasseRequest;
-use App\Http\Resources\ClasseResource\ClasseResource;
 use App\Http\Resources\ClasseResource\ClasseResourceCollection;
 use App\Models\Classe;
 use App\Services\ClasseService;
@@ -53,7 +52,7 @@ class ClasseController extends Controller
      */
     public function show($id)
     {
-       $classe = $this->ClasseService->checkClasseNotExiste($id);
+        $classe = $this->ClasseService->checkClasseNotExiste($id);
         return response(
             [
                 'success' => 1,

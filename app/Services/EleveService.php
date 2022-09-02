@@ -5,8 +5,9 @@ namespace App\Services;
 use App\Exceptions\NotFoundException;
 use App\Models\Classe;
 use App\Models\Eleve;
+use App\Models\Evenement;
 use App\Models\UserParent;
-use phpDocumentor\Reflection\Types\Parent_;
+
 
 /**
  * Class EleveService.
@@ -19,7 +20,6 @@ class EleveService
         $this->eleveExiste($data);
         $classe = $this->classeExiste($data);
         $parent = $this->parentExiste($data);
-        //return $parent->id;
         $eleve = Eleve::create($data);
         $eleve->classe()->associate($classe->id);
         $eleve->userParent()->associate($parent->id)->save();
@@ -32,8 +32,10 @@ class EleveService
         $this->eleveNOtExiste($id);
         $classe = $this->classeExiste($data);
         $parent = $this->parentExiste($data);
+        $event = $this->EventExiste($data);
         $eleve = $this->getEleve($id);
         $eleve->update($data);
+        $eleve->evenement()->sync($event->id);
         $eleve->classe()->associate($classe->id);
         $eleve->userParent()->associate($parent->id);
         return $eleve;
@@ -48,6 +50,26 @@ class EleveService
         }
         return $eleve;
     }
+
+    // public function MatiereExiste($data)
+    // {
+    //     $matiere = Matiere::firstwhere('id', $data['matiere_id']);
+    //     if (is_null($matiere)) {
+    //         throw new NotFoundException(['code' => -1, 'message' => ' matiere not found ']);
+    //     }
+    //     return $matiere;
+    // }
+
+
+    public function EventExiste($data)
+    {
+        $event = Evenement::firstwhere('id', $data['event_id']);
+        if (is_null($event)) {
+            throw new NotFoundException(['code' => -1, 'message' => ' event not found ']);
+        }
+        return $event;
+    }
+
 
 
     public function parentExiste($data)

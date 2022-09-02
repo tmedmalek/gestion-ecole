@@ -12,8 +12,8 @@ class Matiere extends Model
 
     protected $fillable = [
         'name',
-
-    ];
+        'niveau'
+     ];
 
 
     public function eleves()

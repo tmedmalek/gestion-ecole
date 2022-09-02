@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateEleveRequest extends FormRequest
+class UpdateEvenementRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,14 +24,13 @@ class UpdateEleveRequest extends FormRequest
     public function rules()
     {
         return [
-            'first_name' => 'min:5|max:30|string',
-            'last_name' => 'min:5|max:30|string',
-            'date_naissance' => 'date',
-            'matricule' => '',
-            'classe_id' => '',
-            'parent_cin' => '',
-            'evenements'=>'array',
-            'evenements.*' => 'numeric',
+        'name'=>'string',
+        'type'=>'string',
+        'adresse'=>'string',
+        'date'=>'date',
+        'heure_debut'=>'',
+        'heure_fin'=>'',
+        'nb_places'=>'numeric'
         ];
     }
 }

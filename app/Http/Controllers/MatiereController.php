@@ -15,6 +15,8 @@ class MatiereController extends Controller
     {
         $this->MatiereService = $MatiereService;
     }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -31,6 +33,7 @@ class MatiereController extends Controller
         );
     }
 
+
     /**
      * Store a newly created resource in storage.
      *
@@ -39,12 +42,10 @@ class MatiereController extends Controller
      */
     public function store(StoreMatiereRequest $request)
     {
-        $matiere = $this->MatiereService->store($request->validate());
-        if (is_null($matiere)) {
-            return response(['success' => -1, 'message' => 'matiere is existe'], 200);
-        }
+        $this->MatiereService->store($request->validate());
         return response(['success' => 1, 'message' => 'matiere is create'], 201);
     }
+
 
     /**
      * Display the specified resource.
@@ -54,10 +55,7 @@ class MatiereController extends Controller
      */
     public function show($id)
     {
-        $matiere = Matiere::firstwhere('id', $id);
-        if (is_null($matiere)) {
-            return response(['success' => -1, 'message' => 'is not found'], 200);
-        }
+        $matiere = $this->MatiereService->getMatiere($id);
         return response(
             [
                 'success' => 1,
@@ -66,6 +64,7 @@ class MatiereController extends Controller
             201
         );
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -76,10 +75,7 @@ class MatiereController extends Controller
      */
     public function update(StoreMatiereRequest $request, $id)
     {
-        $matiere = $this->MatiereService->update($request->validate(), $id);
-        if (isset($matiere)) {
-            return response(['succes' => -1, 'message' => 'is not existe'], 200);
-        }
+        $this->MatiereService->update($request->validate(), $id);
         return response(['succes' => -1, 'message' => 'Matiere is updated'], 201);
     }
 
@@ -91,12 +87,7 @@ class MatiereController extends Controller
      */
     public function destroy($id)
     {
-
-        $matiere = Matiere::where('id', $id)->first();
-        if (is_null($matiere)) {
-            return response(['success' => -1, 'message' => 'is not found'], 200);
-        }
-
+        $matiere = $this->MatiereService->getMatiere($id);
         $matiere->delete();
         return response(['success' => 1, 'message' => 'matiere is deleted'], 201);
     }

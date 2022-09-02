@@ -18,6 +18,7 @@ class MatiereFactory extends Factory
     {
         return [
             'name'=>fake()->name(),
+            'niveau'=>fake()->name(),
         ];
     }
 }

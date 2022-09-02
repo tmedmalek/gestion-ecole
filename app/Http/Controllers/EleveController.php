@@ -27,7 +27,7 @@ class EleveController extends Controller
         return response(
             [
                 'success' => 1,
-                'data' =>new EleveResourceCollection(Eleve::all())
+                'data' => new EleveResourceCollection(Eleve::all())
             ],
             201
         );

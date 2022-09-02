@@ -17,6 +17,7 @@ class MatiereResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'niveau' => $this->niveau,
         ];
     }
 }
