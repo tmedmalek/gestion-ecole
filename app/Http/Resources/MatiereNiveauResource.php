@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class MatiereResource extends JsonResource
+class MatiereNiveauResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,8 +16,9 @@ class MatiereResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'niveaux' => new NiveauResourceCollection($this->niveux)
+            'niveau_id' => $this->niveau_id,
+            'matiere_id' => $this->matiere_id,
+            'nb_heure_semaine' => $this->nb_heure_semaine
         ];
     }
 }

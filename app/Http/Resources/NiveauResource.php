@@ -2,9 +2,10 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Resources\ClasseResource\ClasseResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class MatiereResource extends JsonResource
+class NiveauResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,9 +16,9 @@ class MatiereResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'niveaux' => new NiveauResourceCollection($this->niveux)
+            'niveau_scolaire' => $this->niveau_scolaire,
+            'nb_heure_semaine' => $this->nb_heure_semaine,
+            'classes' => new ClasseResourceCollection($this->classes)
         ];
     }
 }

@@ -23,6 +23,12 @@ class Seance extends Model
         return $this->belongsTo(Classe::class);
     }
 
+    
+    public function salle()
+    {
+        return $this->belongsTo(Salle::class);
+    }
+
 
     public function matiere_prof()
     {

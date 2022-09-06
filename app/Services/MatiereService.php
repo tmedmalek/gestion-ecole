@@ -30,7 +30,7 @@ class MatiereService
 
     public function checkMatiereNotEXiste($data)
     {
-        $matiere = Matiere::where(['name' => $data['name'], 'niveau' => $data['niveau']]);
+        $matiere = Matiere::where('name', $data['name']);
         if (isset($matiere)) {
             throw new NotFoundException(['note' => -1, 'message' => 'matiere existe']);
         }
@@ -39,7 +39,7 @@ class MatiereService
 
     public function checkMatiereEXiste($data, $id)
     {
-        $matiere = Matiere::where(['name' => $data['name'], 'niveau' => $data['niveau']]);
+        $matiere = Matiere::where('name', $data['name']);
         if (isset($matiere) && $id != $matiere->id) {
             throw new NotFoundException(['note' => -1, 'message' => 'matiere existe']);
         }

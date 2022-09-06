@@ -79,6 +79,7 @@ class MatiereController extends Controller
         return response(['succes' => -1, 'message' => 'Matiere is updated'], 201);
     }
 
+
     /**
      * Remove the specified resource from storage.
      *

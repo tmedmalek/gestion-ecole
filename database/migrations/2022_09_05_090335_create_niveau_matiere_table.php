@@ -13,9 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('matieres', function (Blueprint $table) {
+        Schema::create('niveau_matiere', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->unsignedBigInteger('matiere_id');
+            $table->foreign('matiere_id')->references('id')->on('matieres');
+            $table->unsignedBigInteger('niveau_id');
+            $table->foreign('niveau_id')->references('id')->on('niveaux');
+            $table->integer('nb_heure_semaine');
             $table->timestamps();
         });
     }
@@ -27,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('matieres');
+        Schema::dropIfExists('niveau_matiere');
     }
 };

@@ -7,6 +7,7 @@ use App\Http\Controllers\EleveController;
 use App\Http\Controllers\EvenementController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\MatiereController;
+use App\Http\Controllers\NiveauController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\ProfesseurController;
 use App\Http\Controllers\ResetPasswordController;
@@ -100,3 +101,10 @@ Route::prefix('evenements')->controller(EvenementController::class)->group(funct
     Route::delete('/{id}', 'destroy');
 });
 
+Route::prefix('niveaux')->controller(NiveauController::class)->group(function () {
+    Route::get('', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('', 'store');
+    Route::put('/{id}', 'update');
+    Route::delete('/{id}', 'destroy');
+});

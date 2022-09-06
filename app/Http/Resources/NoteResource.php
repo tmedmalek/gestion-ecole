@@ -15,13 +15,13 @@ class NoteResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'=>$this->id,
-            'note'=>$this->note,
-            'eleve' => ['eleve_id' => $this->eleve_id, 'name' => $this->eleve->name],
-            'matiere'=>['matiere_id' => $this->matiere_id, 'name' => $this->matiere->name],
-            'bulletin_id',
-            'trimestre_id',
-            
+            'id' => $this->id,
+            'note' => $this->note,
+            'eleve_id' => $this->eleve_id,
+            'matiere_id' => $this->matiere_id,
+            'bulletin_id' => $this->bulletin_id,
+            'trimestre_id' => $this->trimestre_id,
+
         ];
     }
 }

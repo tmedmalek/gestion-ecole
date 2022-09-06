@@ -16,6 +16,8 @@ class ClasseController extends Controller
     {
         $this->ClasseService = $ClasseService;
     }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -32,6 +34,7 @@ class ClasseController extends Controller
         );
     }
 
+
     /**
      * Store a newly created resource in storage.
      *
@@ -43,6 +46,7 @@ class ClasseController extends Controller
         $this->ClasseService->store($request->validated());
         return response(['success' => 1, 'message' => 'classe is create'], 201);
     }
+
 
     /**
      * Display the specified resource.
@@ -62,6 +66,7 @@ class ClasseController extends Controller
         );
     }
 
+
     /**
      * Update the specified resource in storage.
      *
@@ -74,6 +79,7 @@ class ClasseController extends Controller
         $this->ClasseService->update($request->validated(), $id);
         return response(['success' => 1, 'message' => 'classe is updated'], 201);
     }
+
 
     /**
      * Remove the specified resource from storage.

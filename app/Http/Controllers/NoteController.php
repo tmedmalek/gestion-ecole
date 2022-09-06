@@ -2,12 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateNoteRequest;
 use App\Http\Resources\NoteResource;
+use App\Http\Resources\NoteResourceCollection;
 use App\Models\Note;
-use Illuminate\Http\Request;
+use App\Services\NoteService;
 
 class NoteController extends Controller
 {
+
+    private $NoteService;
+
+    public function __construct(NoteService $NoteService)
+    {
+        $this->NoteService = $NoteService;
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -18,22 +29,13 @@ class NoteController extends Controller
         return response(
             [
                 'success' => 1,
-                'data' => NoteResource::collection(Note::all())
+                'data' => new NoteResourceCollection(Note::all())
             ],
             201
         );
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+
 
     /**
      * Display the specified resource.
@@ -43,8 +45,13 @@ class NoteController extends Controller
      */
     public function show($id)
     {
-        //
+        $note = $this->NoteService->getNote($id);
+        return response([
+            'succes' => 1,
+            'data' => new NoteResource($note)
+        ], 201);
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -53,9 +60,10 @@ class NoteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateNoteRequest $request, $id)
     {
-        //
+        $this->NoteService->update($request->validated(), $id);
+        return response(['succes' => 1, 'message' => 'note is updated'], 201);
     }
 
     /**
@@ -66,6 +74,8 @@ class NoteController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $note = $this->NoteService->getNote($id);
+        $note->delete();
+        return response(['succes' => 1, 'message' => 'note is deleted'], 201);
     }
 }

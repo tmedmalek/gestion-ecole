@@ -12,8 +12,7 @@ class Matiere extends Model
 
     protected $fillable = [
         'name',
-        'niveau'
-     ];
+    ];
 
 
     public function eleves()
@@ -25,5 +24,10 @@ class Matiere extends Model
     public function professeurs()
     {
         return $this->belongsToMany(Professeur::class, 'matiere_prof', 'matiere_id', 'professeur_id');
+    }
+
+    public function niveaux()
+    {
+        return $this->belongsToMany(Niveau::class, 'niveau_matiere','matiere_id','niveau_id');
     }
 }

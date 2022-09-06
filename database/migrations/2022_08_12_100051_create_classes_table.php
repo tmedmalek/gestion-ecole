@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('niveau_scolaire');
             $table->string('debut_annee_scolaire')->nullable();
             $table->date('fin_annee_scolaire')->nullable();
+            $table->unsignedBigInteger('niveau_id')->nullable();
+            $table->foreign('niveau_id')->references('id')->on('niveaux');
             $table->timestamps();
         });
     }

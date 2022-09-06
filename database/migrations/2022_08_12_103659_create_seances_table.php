@@ -23,6 +23,8 @@ return new class extends Migration
             $table->foreign('classe_id')->references('id')->on('classes');
             $table->unsignedBigInteger('matiere_prof_id');
             $table->foreign('matiere_prof_id')->references('id')->on('matiere_prof');
+            $table->unsignedBigInteger('salle_id');
+            $table->foreign('salle_id')->references('id')->on('salles');
 
            $table->timestamps();
         });
