@@ -22,7 +22,7 @@ class EleveResource extends JsonResource
             'type' => $this->type,
             'classe_id' => $this->classe_id,
             'parent_id' => $this->parent_id,
-            'evenements'=> new EvenementResourceCollection($this->evenements)
+            // 'evenements' => new EvenementResourceCollection($this->evenements)
         ];
     }
 }

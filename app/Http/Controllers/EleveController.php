@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\NotFoundException;
+use App\Exceptions\IsExisteExcetion;
 use App\Http\Requests\StoreEleveRequest;
 use App\Http\Requests\UpdateEleveRequest;
 use App\Http\Resources\EleveResource;
@@ -11,11 +13,8 @@ use App\Services\EleveService;
 
 class EleveController extends Controller
 {
-    private $EleveService;
-
-    public function __construct(EleveService $EleveService)
+    public function __construct(private EleveService $eleveService)
     {
-        $this->EleveService = $EleveService;
     }
     /**
      * Display a listing of the resource.
@@ -41,7 +40,21 @@ class EleveController extends Controller
      */
     public function store(StoreEleveRequest $request)
     {
-        $this->EleveService->store($request->validated());
+        $eleve = $this->eleveService->eleveExiste($request);
+        if (isset($eleve)) {
+            throw new IsExisteExcetion(['code' => -1, 'name' => ' eleve']);
+        }
+        $classe = $this->eleveService->classeExiste($request);
+        if (is_null($classe)) {
+            throw new NotFoundException(['code' => -2, 'message' => ' classe not found ']);
+        }
+        $parent = $this->eleveService->parentExiste($request);
+        if (is_null($parent)) {
+            throw new NotFoundException(['code' => -3, 'message' => ' parent not found ']);
+        }
+        $eleve = Eleve::create($request->validated());
+        $eleve->classe()->associate($classe->id);
+        $eleve->userParent()->associate($parent->id)->save();
         return response(['success' => 1, 'message' => 'eleve is create'], 201);
     }
 
@@ -54,7 +67,10 @@ class EleveController extends Controller
     public function show($id)
     {
 
-        $eleve = $this->EleveService->eleveNOtExiste($id);
+        $eleve = $this->eleveService->eleveNOtExiste($id);
+        if (is_null($eleve)) {
+            throw new NotFoundException(['code' => -1, 'message' => ' eleve not found']);
+        }
         return response(
             [
                 'success' => 1,
@@ -73,7 +89,27 @@ class EleveController extends Controller
      */
     public function update(UpdateEleveRequest $request, $id)
     {
-        $this->EleveService->update($request->validated(), $id);
+        $eleve = $this->eleveService->eleveNOtExiste($id);
+        if (is_null($eleve)) {
+            throw new NotFoundException(['code' => -1, 'message' => ' eleve not found']);
+        }
+        $classe = $this->eleveService->classeExiste($request);
+        if (is_null($classe)) {
+            throw new NotFoundException(['code' => -2, 'message' => ' classe not found ']);
+        }
+        $parent = $this->eleveService->parentExiste($request);
+        if (is_null($parent)) {
+            throw new NotFoundException(['code' => -3, 'message' => ' parent not found ']);
+        }
+        $event = $this->eleveService->EventExiste($request);
+        if (is_null($event)) {
+            throw new NotFoundException(['code' => -4, 'message' => ' event not found ']);
+        }
+        
+        $eleve->update($request->validated());
+        $eleve->events()->sync($event->id);
+        $eleve->classe()->associate($classe->id);
+        $eleve->userParent()->associate($parent->id);
         return response(['success' => 1, 'message' => 'Eleve is updated'], 201);
     }
 
@@ -85,7 +121,10 @@ class EleveController extends Controller
      */
     public function destroy($id)
     {
-        $eleve = $this->EleveService->eleveNOtExiste($id);
+        $eleve = $this->eleveService->eleveNOtExiste($id);
+        if (is_null($eleve)) {
+            throw new NotFoundException(['code' => -1, 'message' => ' eleve not found']);
+        }
         $eleve->delete();
         return response(['success' => 1, 'message' => 'eleve is deleted'], 201);
     }

@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Exceptions\NotFoundException;
+
 use App\Models\Classe;
 use App\Models\Eleve;
 use App\Models\Evenement;
@@ -14,58 +14,11 @@ use App\Models\UserParent;
  */
 class EleveService
 {
-
-    public function store($data)
-    {
-        $this->eleveExiste($data);
-        $classe = $this->classeExiste($data);
-        $parent = $this->parentExiste($data);
-        $eleve = Eleve::create($data);
-        $eleve->classe()->associate($classe->id);
-        $eleve->userParent()->associate($parent->id)->save();
-        return $eleve;
-    }
-
-
-    public function update($data, $id)
-    {
-        $this->eleveNOtExiste($id);
-        $classe = $this->classeExiste($data);
-        $parent = $this->parentExiste($data);
-        $event = $this->EventExiste($data);
-        $eleve = $this->getEleve($id);
-        $eleve->update($data);
-        $eleve->evenement()->sync($event->id);
-        $eleve->classe()->associate($classe->id);
-        $eleve->userParent()->associate($parent->id);
-        return $eleve;
-    }
-
-
-    public function getEleve($id)
-    {
-        $eleve = Eleve::firstWhere('id', $id);
-        if (is_null($eleve)) {
-            throw new NotFoundException(['code' => -1, 'message' => ' eleve not found']);
-        }
-        return $eleve;
-    }
-
-    // public function MatiereExiste($data)
-    // {
-    //     $matiere = Matiere::firstwhere('id', $data['matiere_id']);
-    //     if (is_null($matiere)) {
-    //         throw new NotFoundException(['code' => -1, 'message' => ' matiere not found ']);
-    //     }
-    //     return $matiere;
-    // }
-
-
     public function EventExiste($data)
     {
         $event = Evenement::firstwhere('id', $data['event_id']);
         if (is_null($event)) {
-            throw new NotFoundException(['code' => -1, 'message' => ' event not found ']);
+            return null;
         }
         return $event;
     }
@@ -76,7 +29,7 @@ class EleveService
     {
         $parent = UserParent::firstwhere('cin', $data['parent_cin']);
         if (is_null($parent)) {
-            throw new NotFoundException(['code' => -1, 'message' => ' parent not found ']);
+            return null;
         }
         return $parent;
     }
@@ -86,7 +39,7 @@ class EleveService
     {
         $classe = Classe::firstwhere('id', $data['classe_id']);
         if (is_null($classe)) {
-            throw new NotFoundException(['code' => -1, 'message' => ' classe not found ']);
+            return null;
         }
         return $classe;
     }
@@ -97,17 +50,18 @@ class EleveService
         $eleve = Eleve::firstWhere('matricule', $data['matricule']);
 
         if (isset($eleve)) {
-            throw new NotFoundException(['code' => -1, 'message' => ' eleve existe']);
+            return null;
         }
+        return $eleve;
     }
 
 
     public function eleveNOtExiste($id)
     {
-        $eleve = Eleve::firstWhere('id', $id);
+        $eleve = Eleve::find($id);
 
         if (is_null($eleve)) {
-            throw new NotFoundException(['code' => -1, 'message' => ' eleve not found']);
+            return null;
         }
         return $eleve;
     }

@@ -27,10 +27,10 @@ class UpdateEleveRequest extends FormRequest
             'first_name' => 'min:5|max:30|string',
             'last_name' => 'min:5|max:30|string',
             'date_naissance' => 'date',
-            'matricule' => '',
-            'classe_id' => '',
-            'parent_cin' => '',
-            'evenements'=>'array',
+            'matricule' => 'integer|nullable',
+            'classe_id' => 'integer|nullable',
+            'parent_cin' => 'integer|nullable',
+            'evenements'=>'array|nullable',
             'evenements.*' => 'numeric',
         ];
     }
