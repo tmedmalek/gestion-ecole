@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateNoteRequest extends FormRequest
+class UpdateMatiereRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class UpdateNoteRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return false;
     }
 
     /**
@@ -24,6 +24,9 @@ class UpdateNoteRequest extends FormRequest
     public function rules()
     {
         return [
-            'note'=>'required'        ];
+            'name' => 'required|min:5|max:30',
+            'niveaux' => 'array',
+            'niveaux.*' => 'numeric',
+        ];
     }
 }

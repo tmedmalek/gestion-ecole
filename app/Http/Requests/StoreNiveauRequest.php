@@ -24,8 +24,8 @@ class StoreNiveauRequest extends FormRequest
     public function rules()
     {
         return [
-            'niveau_scolaire' => 'required|numetic',
-            'nb_heure_semaine' => 'required|numeric'
+            'niveau_scolaire' => 'required|',
+            'nb_heure_semaine' => 'required|'
         ];
     }
 }

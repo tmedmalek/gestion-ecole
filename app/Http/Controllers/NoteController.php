@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreNoteRequest;
 use App\Http\Requests\UpdateNoteRequest;
 use App\Http\Resources\NoteResource;
 use App\Http\Resources\NoteResourceCollection;
@@ -33,6 +34,18 @@ class NoteController extends Controller
             ],
             201
         );
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(StoreNoteRequest $request)
+    {
+        $this->NoteService->store($request->validated());
+        return response(['succes' => 1, 'data' => 'note is created'], 201);
     }
 
 

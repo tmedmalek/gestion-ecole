@@ -37,12 +37,11 @@ class MatiereNiveauController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(MatiereNiveau $MatiereNiveau)
     {
-        $matniveau = $this->MatiereNiveauService->getMatniveau($id);
         return response([
             'success' => 1,
-            'data' => new MatiereNiveauResource($matniveau)
+            'data' => new MatiereNiveauResource($MatiereNiveau)
         ], 201);
     }
     
@@ -54,9 +53,9 @@ class MatiereNiveauController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateMatiereNiveauRequest $request, $id)
+    public function update(UpdateMatiereNiveauRequest $request, MatiereNiveau $MatiereNiveau)
     {
-        $this->MatiereNiveauService->update($request->validated(), $id);
+        $this->MatiereNiveauService->update($request->validated(), $MatiereNiveau);
         return response(['success' => 1, 'message' => 'MatiereNiveau is updated'], 201);
     }
 
@@ -67,10 +66,9 @@ class MatiereNiveauController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy( MatiereNiveau $MatiereNiveau)
     {
-        $matniveau = $this->MatiereNiveauService->getMatniveau($id);
-        $matniveau->delete();
+        $MatiereNiveau->delete();
         return response(['success' => 1, 'message' => 'MatiereNiveau is delated'], 201);
     }
 }

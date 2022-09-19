@@ -10,15 +10,10 @@ use App\Models\Professeur;
 use App\Services\ProfesseurService;
 
 class ProfesseurController extends Controller
-{
-
-    private $ProfesseurService;
-
-    public function __construct(ProfesseurService $ProfesseurService)
+{     
+    public function __construct(private ProfesseurService $professeurService)
     {
-        $this->ProfesseurService = $ProfesseurService;
     }
-
 
     /**
      * Display a listing of the resource.
@@ -42,7 +37,7 @@ class ProfesseurController extends Controller
      */
     public function store(StoreProfesseurRequest $request)
     {
-        $this->ProfesseurService->store($request->validated());
+        $this->professeurService->store($request->validated());
         return response(['success' => 1, 'message' => 'professeur is create'], 201);
     }
 
@@ -54,7 +49,7 @@ class ProfesseurController extends Controller
      */
     public function show($id)
     {
-        $professeur = $this->ProfesseurService->getProf($id);
+        $professeur = $this->professeurService->getProf($id);
         return response(
             [
                 'success' => 1,
@@ -74,7 +69,7 @@ class ProfesseurController extends Controller
      */
     public function update(UpdateProfesseurRequest $request, $id)
     {
-        $this->ProfesseurService->update($request->validated(), $id);
+        $this->professeurService->update($request->validated(), $id);
         return response(['success' => 1, 'message' => 'professeur is updated'], 201);
     }
 
@@ -87,8 +82,8 @@ class ProfesseurController extends Controller
      */
     public function destroy($id)
     {
-        $professeur = $this->ProfesseurService->getProf($id);
-        $this->ProfesseurService->destroyMatiere($id);
+        $professeur = $this->professeurService->getProf($id);
+        $this->professeurService->destroyMatiere($id);
         $professeur->delete();
         return  response(['success' => 1, 'message' => 'professeur is deleted'], 201);
     }

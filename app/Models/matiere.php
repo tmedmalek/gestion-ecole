@@ -14,6 +14,8 @@ class Matiere extends Model
         'name',
     ];
 
+    protected $table = 'matieres';
+
 
     public function eleves()
     {

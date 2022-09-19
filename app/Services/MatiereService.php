@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Exceptions\NotFoundException;
 use App\Models\Matiere;
+use App\Models\Niveau;
 
 /**
  * Class MatiereService.
@@ -12,37 +12,53 @@ class MatiereService
 {
     public function store($data)
     {
-
-        $this->checkMatiereNotEXiste($data);
-        $matiere = Matiere::create($data);
-        return $matiere;
+        return Matiere::create($data);
     }
 
 
-    public function update($data, $id)
+    public function update($matiere, $data)
     {
-        $this->checkMatiereEXiste($data, $id);
-        $matiere = $this->getMatiere($id);
         $matiere->update($data);
         return $matiere;
     }
 
 
+    public function setniveau($matiere, $niveaux)
+    {
+        if (isset($niveaux)) {
+            $niveau = Niveau::whereIn('id', $niveaux)->get();
+            $matiere->niveaux()->sync($niveau);
+        }
+    }
+
+
+    public function checkNiveauExiste($niveaux)
+    {
+        $niveaux = Niveau::whereIn('id', $niveaux)->get();
+        if (is_null($niveaux)) {
+            return null;
+        }
+        return $niveaux;
+    }
+
+
     public function checkMatiereNotEXiste($data)
     {
-        $matiere = Matiere::where('name', $data['name']);
+        $matiere = Matiere::firstWhere('name', $data);
         if (isset($matiere)) {
-            throw new NotFoundException(['note' => -1, 'message' => 'matiere existe']);
+            return $matiere;
         }
+        return null;
     }
 
 
     public function checkMatiereEXiste($data, $id)
     {
-        $matiere = Matiere::where('name', $data['name']);
+        $matiere = Matiere::firstWhere('name', $data);
         if (isset($matiere) && $id != $matiere->id) {
-            throw new NotFoundException(['note' => -1, 'message' => 'matiere existe']);
+            return null;
         }
+        return $matiere;
     }
 
 
@@ -50,7 +66,7 @@ class MatiereService
     {
         $matiere = Matiere::where('id', $id)->first();
         if (is_null($matiere)) {
-            throw new NotFoundException(['note' => -1, 'message' => 'matiere not found']);
+            return false;
         }
         return $matiere;
     }

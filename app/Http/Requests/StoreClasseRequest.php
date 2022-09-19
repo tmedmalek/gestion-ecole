@@ -25,9 +25,9 @@ class StoreClasseRequest extends FormRequest
     {
         return [
             'name' => 'required|string|min:5|max:30',
-            'niveau_scolaire' => 'required|string|min:5|max:30',
             'debut_annee_scolaire' => 'required|date',
-            'fin_annee_scolaire' => 'required|date'
+            'fin_annee_scolaire' => 'required|date',
+            'niveau_id' => '',
         ];
     }
 }

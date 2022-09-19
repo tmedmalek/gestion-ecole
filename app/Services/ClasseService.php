@@ -15,8 +15,9 @@ class ClasseService
     {
         $this->checkniveauexiste($data['niveau_id']);
         $this->checkClasseNameExiste($data);
-        $clase = Classe::create($data);
-        return $clase;
+        $classe = Classe::create($data);
+        $classe->niveau()->associate($data['niveau_id']);
+        return $classe;
     }
 
 

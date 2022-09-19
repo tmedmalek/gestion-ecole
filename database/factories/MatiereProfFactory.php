@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Classe>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\MatiereProf>
  */
-class ClasseFactory extends Factory
+class MatiereProfFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,9 +17,8 @@ class ClasseFactory extends Factory
     public function definition()
     {
         return [
-            'name'=>fake()->name(),
-            'debut_annee_scolaire' => fake()->date(),
-            'fin_annee_scolaire' => fake()->date(),
+            'professeur_id'=>1,
+            'matiere_id'=>1,
         ];
     }
 }

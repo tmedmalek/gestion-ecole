@@ -10,20 +10,9 @@ use App\Models\MatiereNiveau;
  */
 class MatiereNiveauService
 {
-   public function update($data, $id)
+   public function update($data, $MatiereNiveau)
    {
-      $matniveau = $this->getMatniveau($id);
-      $matniveau->update($data);
-      return $matniveau;
-   }
-
-
-   public function getMatniveau($id)
-   {
-      $matniveau = MatiereNiveau::find($id);
-      if (is_null($matniveau)) {
-         throw new NotFoundException(['code' => -1, 'message' => 'matierniveau not found']);
-      }
-      return $matniveau;
+      $MatiereNiveau->update($data);
+      return $MatiereNiveau;
    }
 }

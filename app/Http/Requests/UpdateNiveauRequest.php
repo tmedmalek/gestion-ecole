@@ -24,8 +24,8 @@ class UpdateNiveauRequest extends FormRequest
     public function rules()
     {
         return [
-            'niveau_scolaire' => 'numetic',
-            'nb_heure_semaine' => 'Fnumeric'
+            'niveau_scolaire' => '',
+            'nb_heure_semaine' => ''
         ];
     }
 }

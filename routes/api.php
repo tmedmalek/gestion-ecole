@@ -2,15 +2,18 @@
 
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CalendrierController;
 use App\Http\Controllers\ClasseController;
 use App\Http\Controllers\EleveController;
 use App\Http\Controllers\EvenementController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\MatiereController;
+use App\Http\Controllers\MatiereNiveauController;
 use App\Http\Controllers\NiveauController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\ProfesseurController;
 use App\Http\Controllers\ResetPasswordController;
+use App\Http\Controllers\SeanceController;
 use App\Http\Controllers\UserParentController;
 use Illuminate\Support\Facades\Route;
 
@@ -72,6 +75,10 @@ Route::prefix('resetpassword')->controller(ResetPasswordController::class)->grou
 
 Route::prefix('notes')->controller(NoteController::class)->group(function () {
     Route::get('', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('', 'store');
+    Route::put('/{id}', 'update');
+    Route::delete('/{id}', 'destroy');
 });
 
 
@@ -84,12 +91,14 @@ Route::prefix('classes')->controller(ClasseController::class)->middleware(['auth
 });
 
 
-Route::prefix('matieres')->controller(MatiereController::class)->middleware(['auth:api', 'scopes:admin'])->group(function () {
-    Route::get('', 'index');
-    Route::get('/{id}', 'show');
-    Route::post('', 'store');
-    Route::put('/{id}', 'update');
-    Route::delete('/{id}', 'destroy');
+Route::prefix('matieres')->controller(MatiereController::class)->middleware(['auth:api'])->group(function () {
+    Route::middleware('scopes:admin')->group(function () {
+        Route::get('', 'index');
+        Route::post('', 'store');
+        Route::put('/{id}', 'update');
+        Route::delete('/{id}', 'destroy');
+    });
+    Route::get('/{matiere}', 'show')->middleware(['scopes:admin,professeur']);
 });
 
 
@@ -107,4 +116,24 @@ Route::prefix('niveaux')->controller(NiveauController::class)->group(function ()
     Route::post('', 'store');
     Route::put('/{id}', 'update');
     Route::delete('/{id}', 'destroy');
+});
+
+Route::prefix('seances')->controller(SeanceController::class)->group(function () {
+    Route::get('', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('', 'store');
+    Route::put('/{id}', 'update');
+    Route::delete('', 'destroy');
+});
+
+
+Route::prefix('matniv')->controller(MatiereNiveauController::class)->group(function () {
+    Route::get('', 'index');
+    Route::get('/{MatiereNiveau}', 'show');
+    Route::put('/{MatiereNiveau}', 'update');
+    Route::delete('/{MatiereNiveau}', 'destroy');
+});
+
+Route::prefix('calendrier')->controller(CalendrierController::class)->group(function () {
+    Route::get('', 'index');
 });

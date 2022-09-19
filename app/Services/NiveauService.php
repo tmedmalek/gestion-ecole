@@ -29,16 +29,16 @@ class NiveauService
 
    public function checkNiveauExiste($data)
    {
-      $niveau = Niveau::fristWhere('niveau_scolaire', $data);
+      $niveau = Niveau::firstWhere('niveau_scolaire', $data);
       if (isset($niveau)) {
          throw new NotFoundException(['code' => -1, 'message' => 'niveau is existe']);
       }
    }
 
-   
+
    public function checkNiveauNotExiste($data, $id)
    {
-      $niveau = Niveau::fristWhere('niveau_scolaire', $data);
+      $niveau = Niveau::firstWhere('niveau_scolaire', $data);
       if (isset($niveau) && $id != $niveau->id) {
          throw new NotFoundException(['code' => -1, 'message' => 'niveau is existe']);
       }

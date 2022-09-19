@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::create('classes', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            $table->string('niveau_scolaire');
             $table->string('debut_annee_scolaire')->nullable();
             $table->date('fin_annee_scolaire')->nullable();
             $table->unsignedBigInteger('niveau_id')->nullable();

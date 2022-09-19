@@ -13,14 +13,15 @@ class Niveau extends Model
         'niveau_scolaire',
         'nb_heure_semaine'
     ];
-    
+
 
     public function matieres()
     {
-        return $this->belongsToMany(Matiere::class, 'niveau_matiere','matiere_id','niveau_id');
+        return $this->belongsToMany(Matiere::class, 'niveau_matiere', 'niveau_id', 'matiere_id');
     }
 
-
-   
-
+    public function classes()
+    {
+        return $this->hasMany(Classe::class);
+    }
 }

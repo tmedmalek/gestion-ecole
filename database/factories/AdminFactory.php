@@ -18,10 +18,10 @@ class AdminFactory extends Factory
     public function definition()
     {
         return [
-            'email'=>fake()->email(),
+            'email'=>'malek@gmail.com',
             'password'=>bcrypt('malek123'),
-            'first_name' => fake()->name(),
-            'last_name' => fake()->name(),
+            'first_name' => 'trabelsi',
+            'last_name' => 'malek',
             'remember_token' => Str::random(10),
         ];
     }

@@ -25,7 +25,8 @@ class StoreMatiereRequest extends FormRequest
     {
         return [
             'name' => 'required|min:5|max:30',
-            'niveau' => 'required|string'
+            'niveaux' => 'array',
+            'niveaux.*' => 'numeric',
         ];
     }
 }

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreign('matiere_id')->references('id')->on('matieres');
             $table->unsignedBigInteger('niveau_id');
             $table->foreign('niveau_id')->references('id')->on('niveaux');
-            $table->integer('nb_heure_semaine');
+            $table->integer('nb_heure_semaine')->nullable();
             $table->timestamps();
         });
     }
