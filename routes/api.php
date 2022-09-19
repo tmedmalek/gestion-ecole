@@ -83,10 +83,10 @@ Route::prefix('notes')->controller(NoteController::class)->group(function () {
 
 
 Route::prefix('classes')->controller(ClasseController::class)->middleware(['auth:api', 'scopes:admin'])->group(function () {
+    Route::put('/{id}', 'update');
     Route::get('', 'index');
     Route::get('/{id}', 'show');
     Route::post('', 'store');
-    Route::put('/{id}', 'update');
     Route::delete('/{id}', 'destroy');
 });
 

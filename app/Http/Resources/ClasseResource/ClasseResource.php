@@ -3,6 +3,7 @@
 namespace App\Http\Resources\ClasseResource;
 
 use App\Http\Resources\NiveauResource;
+use App\Http\Resources\ProfesseurResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ClasseResource extends JsonResource
@@ -20,7 +21,7 @@ class ClasseResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'eleves' => new ClasseElevesResourceCollection($this->eleves),
-            // 'professeurs' => new ProfesseurResourceCollection($this->professeurs),
+           // 'professeurs' => new ProfesseurResourceCollection($this->professeurs),
             'niveau_id' => $this->niveau_id,
         ];
     }

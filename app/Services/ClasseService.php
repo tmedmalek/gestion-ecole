@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Exceptions\NotFoundException;
 use App\Models\Classe;
 use App\Models\Niveau;
 
@@ -13,31 +12,37 @@ class ClasseService
 {
     public function store($data)
     {
-        $this->checkniveauexiste($data['niveau_id']);
-        $this->checkClasseNameExiste($data);
         $classe = Classe::create($data);
         $classe->niveau()->associate($data['niveau_id']);
         return $classe;
     }
 
 
-    public function update($data, $id)
+    public function update($data, $id, $classe)
     {
-        $classe = $this->checkClasseNotExiste($id);
-        $this->checkniveauexiste($data['niveau_id']);
-        $this->checkClasseNameExiste($data);
         $classe->update($data);
-        return $classe;
+        $classe->niveau()->associate($data['niveau_id']);
     }
 
 
-    public function checkClasseNameExiste($data)
+    public function checkClasseNameExiste($name)
     {
-        $classe = Classe::firstWhere('name', $data['name']);
+        $classe = Classe::firstWhere('name', $name);
 
         if (isset($classe)) {
-            throw new NotFoundException(['code' => -1, 'message' => ' classe existe']);
+            return $classe;
         }
+        return null;
+    }
+
+    public function checkClasseNameIDExiste($name, $id)
+    {
+        $classe = Classe::firstWhere('name', $name);
+
+        if (isset($classe) && $classe->id != $id) {
+            return $classe;
+        }
+        return null;
     }
 
 
@@ -45,7 +50,7 @@ class ClasseService
     {
         $classe = Classe::where('id', $id)->first();
         if (is_null($classe)) {
-            throw new NotFoundException(['code' => -2, 'message' => ' classe not found']);
+            return null;
         }
         return $classe;
     }
@@ -55,7 +60,8 @@ class ClasseService
     {
         $niveau = Niveau::find($id);
         if (is_null($niveau)) {
-            throw new NotFoundException(['code' => -3, 'message' => ' niveau not found']);
+            return null;
         }
+        return $niveau;
     }
 }
