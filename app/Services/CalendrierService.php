@@ -3,41 +3,37 @@
 namespace App\Services;
 
 use App\Models\Seance;
-use Illuminate\Support\Carbon;
+use App\Traits\TimeRangeTrait;
 
 /**
  * Class CalendrierService.
  */
 class CalendrierService
 {
-   public function generateCalendarData($weekDays, $classe_id)
+   use TimeRangeTrait;
+   public function getCalendarData($weekDays, $classe_id)
    {
-
       $calendarData = [];
 
       $timeRange = $this->generateTimeRange(config('app.calendrier.start_time'), config('app.calendrier.end_time'));
 
-      $lessons = Seance::with('classe', 'matiereProf', 'salle')->where('classe_id', $classe_id)->first();
-      if (is_null($lessons)) {
-         return response(['success' => -1, 'message' => 'classse not found'], 200);
-      }
-
+      $lessons = Seance::with('classe')->where('classe_id', $classe_id)
+         ->get();
       foreach ($timeRange as $time) {
          $timeText = $time['start'] . ' - ' . $time['end'];
          $calendarData[$timeText] = [];
 
-
          foreach ($weekDays as $index => $day) {
-          
-            $lesson = $lessons->where('jour_seance', $index)->where('heure_debut', $time['start'])->first();
+            $lesson = $lessons->where('jour_seance', $index)->where('heure_debut', $time['start'] . ':00')->first();
+
             if ($lesson) {
                $calendarData[$timeText][] = [
-                  'classe' => $lessons->classe->name,
-                  'professeur' => $lessons->matiereProf->professeur->first_name . ' ' . $lessons->matiereProf->professeur->last_name,
-                  'salle' => $lessons->salle->numero,
-                  'matiere' => $lessons->matiereProf->matiere->name,
+                  'classe' => $lesson->classe->id,
+                  'professeur' => $lesson->matiereProf->professeur->first_name . ' ' . $lesson->matiereProf->professeur->last_name,
+                  'salle' => $lesson->salle->numero,
+                  'matiere' => $lesson->matiereProf->matiere->name,
                ];
-            } else if (!$lessons->where('jour_seance', $index)->where('heure_debut', '<', $time['start'])->where('heure_fin', '>=', $time['end'])->count()) {
+            } else if (!$lessons->where('jour_seance', $index)->where('heure_debut', '<', $time['start'] . ':00')->where('heure_fin', '>=', $time['end'] . ':00')->count()) {
                array_push($calendarData[$timeText], 1);
             } else {
                array_push($calendarData[$timeText], 0);
@@ -45,25 +41,6 @@ class CalendrierService
          }
       }
 
-
       return $calendarData;
-   }
-
-
-
-   public function generateTimeRange($from, $to)
-   {
-      $time = Carbon::parse($from);
-      $timeRange[] = [
-         'start' => $time->format("H:i"),
-         'end' => $time->addMinutes(120)->format("H:i")
-      ];
-      do {
-         $timeRange[] = [
-            'start' => $time->format("H:i"),
-            'end' => $time->addMinutes(120)->format("H:i")
-         ];
-      } while ($time->format("H:i") !== $to);
-      return $timeRange;
    }
 }

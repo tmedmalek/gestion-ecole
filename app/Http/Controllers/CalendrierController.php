@@ -8,10 +8,14 @@ use Illuminate\Http\Response;
 
 class CalendrierController extends Controller
 {
-    public function index(CalendrierService $calendrierService)
+
+    public function __construct(private CalendrierService $calendrierService)
+    {
+    }
+    public function index($id)
     {
         $weekDays = Seance::WEEK_DAYS;
-        $calendarData = $calendrierService->generateCalendarData($weekDays, request()->input('classe_id'));
+        $calendarData = $this->calendrierService->getCalendarData($weekDays, $id);
         return response($calendarData, Response::HTTP_OK);
     }
 }

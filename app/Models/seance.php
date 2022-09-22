@@ -22,8 +22,6 @@ class Seance extends Model
         'salle_id',
         'matiere',
         'professeur'
-
-
     ];
 
     const WEEK_DAYS = [
@@ -34,6 +32,7 @@ class Seance extends Model
         '5' => 'Vendredi',
         '6' => 'Samedi',
     ];
+
 
 
     public function classe()
@@ -50,7 +49,7 @@ class Seance extends Model
 
     public function matiereProf()
     {
-        return $this->belongsTo(MatiereProf::class,'matiere_prof_id');
+        return $this->belongsTo(MatiereProf::class, 'matiere_prof_id');
     }
 
 

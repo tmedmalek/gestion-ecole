@@ -30,6 +30,6 @@ class Matiere extends Model
 
     public function niveaux()
     {
-        return $this->belongsToMany(Niveau::class, 'niveau_matiere','matiere_id','niveau_id');
+        return $this->belongsToMany(Niveau::class, 'niveau_matiere','matiere_id','niveau_id')->withPivot('nb_heure_semaine');
     }
 }

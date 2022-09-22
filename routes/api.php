@@ -135,5 +135,5 @@ Route::prefix('matniv')->controller(MatiereNiveauController::class)->group(funct
 });
 
 Route::prefix('calendrier')->controller(CalendrierController::class)->group(function () {
-    Route::get('', 'index');
+    Route::get('/{id}', 'index');
 });

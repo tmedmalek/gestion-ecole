@@ -17,7 +17,7 @@ class Niveau extends Model
 
     public function matieres()
     {
-        return $this->belongsToMany(Matiere::class, 'niveau_matiere', 'niveau_id', 'matiere_id');
+        return $this->belongsToMany(Matiere::class, 'niveau_matiere', 'niveau_id', 'matiere_id')->withPivot('nb_heure_semaine');
     }
 
     public function classes()

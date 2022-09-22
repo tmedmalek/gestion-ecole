@@ -3,14 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\NotFoundException;
-use App\Http\Requests\StoreSeanceRequest;
 use App\Http\Resources\SeanceResource;
 use App\Http\Resources\SeanceResourceCollection;
 use App\Models\Classe;
-use App\Models\Salle;
 use App\Models\Seance;
 use App\Services\SeanceService;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class SeanceController extends Controller
@@ -18,8 +15,6 @@ class SeanceController extends Controller
     public function __construct(private SeanceService $seanceService)
     {
     }
-
-
 
 
     /**
@@ -32,6 +27,7 @@ class SeanceController extends Controller
         return new SeanceResourceCollection(Seance::all());
     }
 
+
     /**
      * Store a newly created resource in storage.
      *
@@ -42,41 +38,9 @@ class SeanceController extends Controller
     {
         $weekDays = Seance::WEEK_DAYS;
         $classes = Classe::all();
-        $salles = Salle::all();
-        $times = $this->seanceService->generateTimeRange('08:00', '18:00');
-        foreach ($weekDays as $index => $day) {
-            foreach ($times as $time) {
-                foreach ($classes as $classe) {
-                    $nb_heure = $classe->niveau->nb_heure_semaine;
-                    foreach ($classe->niveau->matieres as $matiere) {
-                        do {
-                            foreach ($matiere->professeurs as $profeseur) {
-                                //  $this->checkprofjourtime($profeseur->id, $time['start'], $time['end'], $day);
-                                foreach ($salles as $salle) {
-                                    $mat_prof = $this->seanceService->getMatiereProf($profeseur->id, $matiere->id);
-                                    $seance = new Seance();
-                                    $seance->classe()->associate($classe->id);
-                                    $seance->matiereProf()->associate($mat_prof->id);
-                                    $seance->salle()->associate($salle->id);
-                                    $seance->professeur = $profeseur->first_name . ' ' . $profeseur->last_name;
-                                    $seance->matiere = $matiere->name;
-                                    $seance->heure_debut = $time['start'];
-                                    $seance->heure_fin = $time['end'];
-                                    $seance->jour_seance = $day;
-                                    $seance->save();
-                                }
-                            }
-
-
-                            --$nb_heure;
-                        } while ($nb_heure == 0);
-                    }
-                }
-            }
-        }
+        $this->seanceService->genereteCalendrierData($classes, $weekDays);
+        return response(['success' => 1, 'message' => 'calendrier is generated']);
     }
-
-
 
 
     /**
@@ -100,6 +64,7 @@ class SeanceController extends Controller
         );
     }
 
+
     /**
      * Update the specified resource in storage.
      *
@@ -111,6 +76,7 @@ class SeanceController extends Controller
     {
         //
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -128,6 +94,6 @@ class SeanceController extends Controller
         foreach ($seances as $seance) {
             $seance->delete();
         }
-        return  response(['success' => 1, 'message' => 'seance is deleted'], 201);
+        return  response(['success' => 1, 'message' => 'calendrier is deleted'], 201);
     }
 }
