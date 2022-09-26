@@ -36,10 +36,10 @@ class SeanceController extends Controller
      */
     public function store()
     {
-        $weekDays = Seance::WEEK_DAYS;
-        $classes = Classe::all();
-        $this->seanceService->genereteCalendrierData($classes, $weekDays);
-        return response(['success' => 1, 'message' => 'calendrier is generated']);
+        // $weekDays = Seance::WEEK_DAYS;
+        // $classes = Classe::all();
+        // $this->seanceService->genereteCalendrierData($classes, $weekDays);
+        // return response(['success' => 1, 'message' => 'calendrier is generated']);
     }
 
 
