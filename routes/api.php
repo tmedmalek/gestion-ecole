@@ -28,6 +28,29 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::prefix('login')->controller(AuthController::class)->group(function () {
+    Route::post('', 'login');
+});
+
+Route::prefix('logout')->controller(AuthController::class)->group(function () {
+    Route::get('', 'logout')->middleware('auth:api');
+});
+
+Route::prefix('forgot-password')->controller(ForgotPasswordController::class)->group(function () {
+    Route::post('', 'ForgotPassword');
+});
+
+
+Route::prefix('verifytoken')->controller(ForgotPasswordController::class)->group(function () {
+    Route::get('', 'Verifytoken');
+});
+
+
+Route::prefix('resetpassword')->controller(ResetPasswordController::class)->group(function () {
+    Route::post('', 'ResetPassword');
+});
+
+
 Route::prefix('eleves')->controller(EleveController::class)->middleware(['auth:api', 'scopes:admin'])->group(function () {
     Route::get('', 'index');
     Route::get('/{id}', 'show');
@@ -51,27 +74,6 @@ Route::prefix('parents')->controller(UserParentController::class)->middleware(['
     Route::delete('/{id}', 'destroy');
 });
 
-Route::prefix('login')->controller(AuthController::class)->group(function () {
-    Route::post('', 'login');
-});
-
-Route::prefix('logout')->controller(AuthController::class)->group(function () {
-    Route::get('', 'logout')->middleware('auth:api');
-});
-
-Route::prefix('forgot-password')->controller(ForgotPasswordController::class)->group(function () {
-    Route::post('', 'ForgotPassword');
-});
-
-
-Route::prefix('verifytoken')->controller(ForgotPasswordController::class)->group(function () {
-    Route::get('', 'Verifytoken');
-});
-
-
-Route::prefix('resetpassword')->controller(ResetPasswordController::class)->group(function () {
-    Route::post('', 'ResetPassword');
-});
 
 Route::prefix('notes')->controller(NoteController::class)->group(function () {
     Route::get('', 'index');
@@ -118,14 +120,6 @@ Route::prefix('niveaux')->controller(NiveauController::class)->group(function ()
     Route::delete('/{id}', 'destroy');
 });
 
-Route::prefix('seances')->controller(SeanceController::class)->group(function () {
-    Route::get('', 'index');
-    Route::get('/{id}', 'show');
-    Route::post('', 'store');
-    Route::put('/{id}', 'update');
-    Route::delete('', 'destroy');
-});
-
 
 Route::prefix('matniv')->controller(MatiereNiveauController::class)->group(function () {
     Route::get('', 'index');
@@ -133,6 +127,15 @@ Route::prefix('matniv')->controller(MatiereNiveauController::class)->group(funct
     Route::put('/{MatiereNiveau}', 'update');
     Route::delete('/{MatiereNiveau}', 'destroy');
 });
+
+
+Route::prefix('seances')->controller(SeanceController::class)->group(function () {
+    Route::get('', 'index');
+    Route::get('/{id}', 'show');
+    Route::put('/{id}', 'update');
+    Route::delete('/{id}', 'destroy');
+});
+
 
 Route::prefix('calendrier')->controller(CalendrierController::class)->group(function () {
     Route::get('/{id}', 'index');

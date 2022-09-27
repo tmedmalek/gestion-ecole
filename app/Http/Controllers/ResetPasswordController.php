@@ -7,17 +7,13 @@ use App\Services\ForgotPasswordService;
 
 class ResetPasswordController extends Controller
 {
-
-    private $ForgotPasswordService;
-
-    public function __construct(ForgotPasswordService $ForgotPasswordService)
+    public function __construct(private ForgotPasswordService $forgotPasswordService)
     {
-        $this->ForgotPasswordService = $ForgotPasswordService;
     }
 
     public function ResetPassword(ResetPasswordTokenRequest $request)
     {
-      $resetpass = $this->ForgotPasswordService->resetpassword($request->validated());
+        $resetpass = $this->forgotPasswordService->resetpassword($request->validated());
         if (isset($resetpass)) {
             return response(['succes' => 1, 'message' => 'password is upadated'], 201);
         }
