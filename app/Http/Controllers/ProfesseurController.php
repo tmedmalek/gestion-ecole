@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\IsExisteExcetion;
+use App\Exceptions\NotFoundException;
 use App\Http\Requests\StoreProfesseurRequest;
 use App\Http\Requests\UpdateProfesseurRequest;
 use App\Http\Resources\ProfesseurResource;
 use App\Http\Resources\ProfesseurResourceCollection;
 use App\Models\Professeur;
 use App\Services\ProfesseurService;
+use App\Traits\MatiereTrait;
 
 class ProfesseurController extends Controller
-{     
+{
+    use MatiereTrait;
     public function __construct(private ProfesseurService $professeurService)
     {
     }
@@ -37,7 +41,17 @@ class ProfesseurController extends Controller
      */
     public function store(StoreProfesseurRequest $request)
     {
-        $this->professeurService->store($request->validated());
+        $professeur =  $this->professeurService->checkProfNotExiste('email', $request['email']);
+        if (isset($professeur)) {
+            throw new IsExisteExcetion(['code' => -1, 'name' => 'email']);
+        }
+        $professeur = $this->professeurService->checkProfNotExiste('cin', $request['cin']);
+        if (isset($professeur)) {
+            throw new IsExisteExcetion(['code' => -1, 'name' => 'cin']);
+        }
+        $request['password'] = bcrypt($request['password']);
+        $professeur = Professeur::create($request->validated());
+        $this->setMatiers($professeur, $request['matieres']);
         return response(['success' => 1, 'message' => 'professeur is create'], 201);
     }
 
@@ -50,6 +64,9 @@ class ProfesseurController extends Controller
     public function show($id)
     {
         $professeur = $this->professeurService->getProf($id);
+        if (is_null($professeur)) {
+            throw new NotFoundException(['code' => -1, 'message' => 'Professeur not found']);
+        }
         return response(
             [
                 'success' => 1,
@@ -69,7 +86,25 @@ class ProfesseurController extends Controller
      */
     public function update(UpdateProfesseurRequest $request, $id)
     {
-        $this->professeurService->update($request->validated(), $id);
+
+        $professeur =  $this->professeurService->checkEmailUnique($request['email'], $id);
+        if (isset($professeur) && $id != $professeur->id) {
+            throw new IsExisteExcetion(['code' => -2, 'name' => 'Professeur_email']);
+        }
+        $professeur =  $this->professeurService->checkCinUnique($request['cin'], $id);
+        if (isset($professeur) && $id != $professeur->id) {
+            throw new IsExisteExcetion(['code' => -3, 'name' => 'Professeur_cin existe']);
+        }
+        $professeur = $this->professeurService->getProf($id);
+        if (is_null($professeur)) {
+            throw new NotFoundException(['code' => -1, 'message' => 'Professeur not found']);
+        }
+        $matiere =  $this->professeurService->checkMatiresExiste($request['matieres']);
+        if (is_null($matiere)) {
+            throw new NotFoundException(['code' => -1, 'message' => 'matiere not found']);
+        }
+        $professeur->update($request->validated());
+        $this->setMatiers($professeur, $request['matieres']);
         return response(['success' => 1, 'message' => 'professeur is updated'], 201);
     }
 
@@ -83,7 +118,10 @@ class ProfesseurController extends Controller
     public function destroy($id)
     {
         $professeur = $this->professeurService->getProf($id);
-        $this->professeurService->destroyMatiere($id);
+        if (is_null($professeur)) {
+            throw new NotFoundException(['code' => -1, 'message' => 'Professeur not found']);
+        }
+        $professeur->matieres()->detach();
         $professeur->delete();
         return  response(['success' => 1, 'message' => 'professeur is deleted'], 201);
     }
