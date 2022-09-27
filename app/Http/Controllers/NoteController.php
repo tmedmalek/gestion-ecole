@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\NotFoundException;
 use App\Http\Requests\StoreNoteRequest;
 use App\Http\Requests\UpdateNoteRequest;
 use App\Http\Resources\NoteResource;
@@ -40,7 +41,17 @@ class NoteController extends Controller
      */
     public function store(StoreNoteRequest $request)
     {
-        $this->noteService->store($request->validated());
+        $matiere = $this->noteService->getMatiere($request['matiere_id']);
+        if (is_null($matiere)) {
+            throw new NotFoundException(['code' => -1, 'message' => 'matiere not found']);
+        }
+        $eleve = $this->noteService->getEleve($request['eleve_id']);
+        if (is_null($eleve)) {
+            throw new NotFoundException(['code' => -2, 'message' => 'eleve not found']);
+        }
+        $note = Note::create($request->validated());
+        $note->matiere()->associate($matiere->id);
+        $note->eleve()->associate($eleve->id)->save();
         return response(['succes' => 1, 'data' => 'note is created'], 201);
     }
 
@@ -55,6 +66,9 @@ class NoteController extends Controller
     public function show($id)
     {
         $note = $this->noteService->getNote($id);
+        if (is_null($note)) {
+            throw new NotFoundException(['code' => -3, 'message' => 'note not found']);
+        }
         return response([
             'succes' => 1,
             'data' => new NoteResource($note)
@@ -71,7 +85,11 @@ class NoteController extends Controller
      */
     public function update(UpdateNoteRequest $request, $id)
     {
-        $this->noteService->update($request->validated(), $id);
+        $note = $this->noteService->getNote($id);
+        if (is_null($note)) {
+            throw new NotFoundException(['code' => -3, 'message' => 'note not found']);
+        }
+        $note->update($request->validated());
         return response(['succes' => 1, 'message' => 'note is updated'], 201);
     }
 
@@ -84,6 +102,9 @@ class NoteController extends Controller
     public function destroy($id)
     {
         $note = $this->noteService->getNote($id);
+        if (is_null($note)) {
+            throw new NotFoundException(['code' => -3, 'message' => 'note not found']);
+        }
         $note->delete();
         return response(['succes' => 1, 'message' => 'note is deleted'], 201);
     }
