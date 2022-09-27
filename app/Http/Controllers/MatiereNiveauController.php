@@ -11,11 +11,9 @@ use App\Services\MatiereNiveauService;
 
 class MatiereNiveauController extends Controller
 {
-    private $MatiereNiveauService;
 
-    public function __construct(MatiereNiveauService $MatiereNiveauService)
+    public function __construct(private MatiereNiveauService $matiereNiveauService)
     {
-        $this->MatiereNiveauService = $MatiereNiveauService;
     }
     /**
      * Display a listing of the resource.
@@ -44,7 +42,7 @@ class MatiereNiveauController extends Controller
             'data' => new MatiereNiveauResource($MatiereNiveau)
         ], 201);
     }
-    
+
 
     /**
      * Update the specified resource in storage.
@@ -55,7 +53,7 @@ class MatiereNiveauController extends Controller
      */
     public function update(UpdateMatiereNiveauRequest $request, MatiereNiveau $MatiereNiveau)
     {
-        $this->MatiereNiveauService->update($request->validated(), $MatiereNiveau);
+        $this->matiereNiveauService->update($request->validated(), $MatiereNiveau);
         return response(['success' => 1, 'message' => 'MatiereNiveau is updated'], 201);
     }
 
@@ -66,7 +64,7 @@ class MatiereNiveauController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy( MatiereNiveau $MatiereNiveau)
+    public function destroy(MatiereNiveau $MatiereNiveau)
     {
         $MatiereNiveau->delete();
         return response(['success' => 1, 'message' => 'MatiereNiveau is delated'], 201);

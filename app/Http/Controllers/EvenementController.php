@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\IsExisteExcetion;
+use App\Exceptions\NotFoundException;
 use App\Http\Requests\StoreEvenementRequest;
 use App\Http\Requests\UpdateEvenementRequest;
 use App\Http\Resources\EvenementResource;
@@ -11,11 +13,9 @@ use App\Services\EvenementService;
 
 class EvenementController extends Controller
 {
-    private $EvenementService;
 
-    public function __construct(EvenementService $EvenementService)
+    public function __construct(private EvenementService $evenementService)
     {
-        $this->EvenementService = $EvenementService;
     }
 
 
@@ -27,7 +27,7 @@ class EvenementController extends Controller
     public function index()
     {
         return response([
-            "succes" => "1",
+            "succes" => 1,
             "data" => new EvenementResourceCollection(Evenement::all())
         ], 200);
     }
@@ -41,7 +41,11 @@ class EvenementController extends Controller
      */
     public function store(StoreEvenementRequest $request)
     {
-        $this->EvenementService->store($request->validated());
+        $event = $this->evenementService->checkEventNotExiste($request['name']);
+        if (isset($event)) {
+            throw new NotFoundException(['code' => -2, 'message' => 'evenement is existe']);
+        }
+        $this->evenementService->store($request->validated());
         return response(['success' => 1, 'message' => 'Evenement is create'], 201);
     }
 
@@ -54,9 +58,12 @@ class EvenementController extends Controller
      */
     public function show($id)
     {
-        $event = $this->EvenementService->getEvent($id);
+        $event = $this->evenementService->getEvent($id);
+        if (is_null($event)) {
+            throw new NotFoundException(['code' => -1, 'message' => ' event not found']);
+        }
         return response([
-            "succes" => "1",
+            "succes" => 1,
             "data" => new EvenementResource($event)
         ], 200);
     }
@@ -71,7 +78,15 @@ class EvenementController extends Controller
     public function update(UpdateEvenementRequest $request, $id)
     {
 
-        $this->EvenementService->update($request->validated(), $id);
+        $event = $this->evenementService->getEvent($id);
+        if (is_null($event)) {
+            throw new NotFoundException(['code' => -1, 'message' => ' event not found']);
+        }
+        $event = $this->evenementService->checkNameNotExiste($request['name'], $id);
+        if (isset($event)) {
+            throw new IsExisteExcetion(['code' => -3, 'name' => 'evenement']);
+        }
+        $event->update($request->validated());
         return response(['success' => 1, 'message' => 'Evenement is upadeted'], 201);
     }
 
@@ -84,7 +99,7 @@ class EvenementController extends Controller
      */
     public function destroy($id)
     {
-        $event = $this->EvenementService->getEvent($id);
+        $event = $this->evenementService->getEvent($id);
         $event->delete();
         return response(['success' => 1, 'message' => 'event is deleted'], 201);
     }

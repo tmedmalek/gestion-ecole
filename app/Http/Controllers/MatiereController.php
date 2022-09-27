@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\IsExisteExcetion;
 use App\Exceptions\NotFoundException;
 use App\Http\Requests\StoreMatiereRequest;
 use App\Http\Resources\MatiereResource;
@@ -13,7 +14,7 @@ class MatiereController extends Controller
 {
 
 
-    public function __construct(private MatiereService $MatiereService)
+    public function __construct(private MatiereService $matiereService)
     {
     }
 
@@ -43,18 +44,18 @@ class MatiereController extends Controller
      */
     public function store(StoreMatiereRequest $request)
     {
-        $matiere = $this->MatiereService->checkMatiereNotEXiste($request['name']);
+        $matiere = $this->matiereService->checkMatiereNotEXiste($request['name']);
         if (isset($matiere)) {
             throw new NotFoundException(['code' => -1, 'message' => 'matiere existe']);
         }
 
-        $niveaux = $this->MatiereService->checkNiveauExiste($request['niveaux']);
+        $niveaux = $this->matiereService->checkNiveauExiste($request['niveaux']);
         if (is_null($niveaux)) {
             throw new NotFoundException(['code' => -1, 'message' => 'niveau not found']);
         }
 
-        $matiere = $this->MatiereService->store($request->validated());
-        $this->MatiereService->setniveau($matiere, $request['niveaux']);
+        $matiere = $this->matiereService->store($request->validated());
+        $this->matiereService->setniveau($matiere, $request['niveaux']);
         return response(['success' => 1, 'message' => 'matiere is create'], 201);
     }
 
@@ -87,22 +88,22 @@ class MatiereController extends Controller
     public function update(StoreMatiereRequest $request, $id)
     {
 
-        $matiere =  $this->MatiereService->checkMatiereEXiste($request['name'], $id);
+        $matiere =  $this->matiereService->checkMatiereEXiste($request['name'], $id);
         if (isset($matiere)) {
-            throw new NotFoundException(['code' => -1, 'message' => 'matiere existe']);
+            throw new IsExisteExcetion(['code' => -1, 'name' => 'matiere']);
         }
 
-        $matiere = $this->MatiereService->getMatiere($id);
+        $matiere = $this->matiereService->getMatiere($id);
         if (!$matiere) {
             throw new NotFoundException(['code' => -1, 'message' => 'matiere not found']);
         }
 
-        $niveaux = $this->MatiereService->checkNiveauExiste($request['niveaux']);
+        $niveaux = $this->matiereService->checkNiveauExiste($request['niveaux']);
         if (is_null($niveaux)) {
             throw new NotFoundException(['code' => -1, 'message' => 'niveau not found']);
         }
-        $this->MatiereService->update($matiere, $request->validated());
-        $this->MatiereService->setniveau($matiere, $request['niveaux']);
+        $this->matiereService->update($matiere, $request->validated());
+        $this->matiereService->setniveau($matiere, $request['niveaux']);
 
         return response(['succes' => -1, 'message' => 'Matiere is updated'], 201);
     }
@@ -116,7 +117,7 @@ class MatiereController extends Controller
      */
     public function destroy($id)
     {
-        $matiere = $this->MatiereService->getMatiere($id);
+        $matiere = $this->matiereService->getMatiere($id);
         if (!$matiere) {
             throw new NotFoundException(['code' => -1, 'message' => 'matiere not found']);
         }

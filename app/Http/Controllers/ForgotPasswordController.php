@@ -8,16 +8,13 @@ use App\Services\ForgotPasswordService;
 
 class ForgotPasswordController extends Controller
 {
-    private $ForgotPasswordService;
-
-    public function __construct(ForgotPasswordService $ForgotPasswordService)
+    public function __construct(private ForgotPasswordService $forgotPasswordService)
     {
-        $this->ForgotPasswordService = $ForgotPasswordService;
     }
 
     public function ForgotPassword(StoreForgotPasswordRequest $request)
     {
-        $token = $this->ForgotPasswordService->forgotpassword($request->validated());
+        $token = $this->forgotPasswordService->forgotpassword($request->validated());
         if (isset($token)) {
             return response(['success' => 1, 'message' => 'email sended'], 200);
         }
@@ -28,7 +25,7 @@ class ForgotPasswordController extends Controller
 
     public function Verifytoken(StoreVerifyTokenRequest $request)
     {
-        $resetpass = $this->ForgotPasswordService->verifytoken($request->validated());
+        $resetpass = $this->forgotPasswordService->verifytoken($request->validated());
         if (isset($resetpass)) {
             return response(['succes' => 1, 'message' => 'token is valide'], 201);
         }

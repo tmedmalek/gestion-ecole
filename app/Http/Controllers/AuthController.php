@@ -11,11 +11,10 @@ use function PHPUnit\Framework\isNull;
 
 class AuthController extends Controller
 {
-    private $authService;
 
-    public function __construct(AuthService $authService)
+
+    public function __construct(private AuthService $authService)
     {
-        $this->authService = $authService;
     }
 
     /**

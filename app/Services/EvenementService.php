@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Exceptions\NotFoundException;
 use App\Models\Evenement;
 
 /**
@@ -12,7 +11,6 @@ class EvenementService
 {
    public function store($data)
    {
-      $this->checkEventNotExiste($data['name']);
       $event = Evenement::create($data);
       return $event;
    }
@@ -22,16 +20,9 @@ class EvenementService
    {
       $event = Evenement::firstwhere('name', $name);
       if (isset($event)) {
-         throw new NotFoundException(['code' => '-1', 'message' => 'evenement is existe']);
+         return $event;
       }
-   }
-
-
-   public function update($data, $id)
-   {
-      $event = $this->getEvent($id);
-      $this->checkNameNotExiste($data['name'], $id);
-      $event->update($data);
+      return null;
    }
 
 
@@ -39,7 +30,7 @@ class EvenementService
    {
       $event = Evenement::find($id);
       if (is_null($event)) {
-         throw new NotFoundException(['code' => -1, 'message' => ' event not found']);
+         return null;
       }
       return $event;
    }
@@ -49,7 +40,8 @@ class EvenementService
    {
       $event = Evenement::firstWhere('name', $name);
       if (isset($event) && $id != $event->id) {
-         throw new NotFoundException(['code' => '-3', 'message' => 'evenement is existe']);
+         return $event;
       }
+      return null;
    }
 }

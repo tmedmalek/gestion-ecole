@@ -11,12 +11,8 @@ use App\Services\NoteService;
 
 class NoteController extends Controller
 {
-
-    private $NoteService;
-
-    public function __construct(NoteService $NoteService)
+    public function __construct(private NoteService $noteService)
     {
-        $this->NoteService = $NoteService;
     }
 
 
@@ -44,7 +40,7 @@ class NoteController extends Controller
      */
     public function store(StoreNoteRequest $request)
     {
-        $this->NoteService->store($request->validated());
+        $this->noteService->store($request->validated());
         return response(['succes' => 1, 'data' => 'note is created'], 201);
     }
 
@@ -58,7 +54,7 @@ class NoteController extends Controller
      */
     public function show($id)
     {
-        $note = $this->NoteService->getNote($id);
+        $note = $this->noteService->getNote($id);
         return response([
             'succes' => 1,
             'data' => new NoteResource($note)
@@ -75,7 +71,7 @@ class NoteController extends Controller
      */
     public function update(UpdateNoteRequest $request, $id)
     {
-        $this->NoteService->update($request->validated(), $id);
+        $this->noteService->update($request->validated(), $id);
         return response(['succes' => 1, 'message' => 'note is updated'], 201);
     }
 
@@ -87,7 +83,7 @@ class NoteController extends Controller
      */
     public function destroy($id)
     {
-        $note = $this->NoteService->getNote($id);
+        $note = $this->noteService->getNote($id);
         $note->delete();
         return response(['succes' => 1, 'message' => 'note is deleted'], 201);
     }

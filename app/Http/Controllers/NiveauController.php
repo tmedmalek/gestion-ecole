@@ -12,11 +12,9 @@ use App\Services\NiveauService;
 
 class NiveauController extends Controller
 {
-    private $NiveauService;
 
-    public function __construct(NiveauService $NiveauService)
+    public function __construct(private NiveauService $niveauService)
     {
-        $this->NiveauService = $NiveauService;
     }
 
 
@@ -42,7 +40,7 @@ class NiveauController extends Controller
      */
     public function store(StoreNiveauRequest $request)
     {
-        $this->NiveauService->store($request->validated());
+        $this->niveauService->store($request->validated());
         return response(['succes' => 1, 'data' => 'niveau is created'], 201);
     }
 
@@ -55,7 +53,7 @@ class NiveauController extends Controller
      */
     public function show($id)
     {
-        $Niveau = $this->NiveauService->getNiveau($id);
+        $Niveau = $this->niveauService->getNiveau($id);
         return response([
             'succes' => 1,
             'data' => new NiveauResource($Niveau)
@@ -72,7 +70,7 @@ class NiveauController extends Controller
      */
     public function update(UpdateNiveauRequest $request, $id)
     {
-        $this->NiveauService->update($request->validated(), $id);
+        $this->niveauService->update($request->validated(), $id);
         return response(['succes' => 1, 'message' => 'niveau is updated'], 201);
     }
 
@@ -85,7 +83,7 @@ class NiveauController extends Controller
      */
     public function destroy($id)
     {
-        $Niveau = $this->NiveauService->getNiveau($id);
+        $Niveau = $this->niveauService->getNiveau($id);
         $Niveau->delete();
         return response(['success' => 1, 'message' => 'niveau is deleted'], 201);
     }
