@@ -50,9 +50,9 @@ class EleveService
         $eleve = Eleve::firstWhere('matricule', $data['matricule']);
 
         if (isset($eleve)) {
-            return null;
+            return $eleve;
         }
-        return $eleve;
+        return null;
     }
 
 

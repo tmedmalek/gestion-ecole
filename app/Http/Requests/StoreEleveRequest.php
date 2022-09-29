@@ -24,12 +24,13 @@ class StoreEleveRequest extends FormRequest
     public function rules()
     {
         return [
-            'first_name' => 'required|min:5|max:30|string',
-            'last_name' => 'required|min:5|max:30|string',
-            'date_naissance' => 'required|date',
-            'matricule' => 'required',
-            'classe_id' => 'required',
-            'parent_cin' => 'required',
+            'users' => 'array',
+            'users.*.first_name' => 'required|min:5|max:30|string',
+            'users.*.last_name' => 'required|min:5|max:30|string',
+            'users.*.date_naissance' => 'required|date',
+            'users.*.matricule' => 'required',
+            'users.*.classe_id' => 'required',
+            'users.*.parent_cin' => 'required',
         ];
     }
 }

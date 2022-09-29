@@ -3,13 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\NotFoundException;
-use App\Exceptions\IsExisteExcetion;
 use App\Http\Requests\StoreEleveRequest;
 use App\Http\Requests\UpdateEleveRequest;
 use App\Http\Resources\EleveResource;
 use App\Http\Resources\EleveResourceCollection;
+use App\Jobs\CreateStudentUser;
 use App\Models\Eleve;
 use App\Services\EleveService;
+use Illuminate\Bus\Batch;
+use Illuminate\Support\Facades\Bus;
 
 class EleveController extends Controller
 {
@@ -40,21 +42,15 @@ class EleveController extends Controller
      */
     public function store(StoreEleveRequest $request)
     {
-        $eleve = $this->eleveService->eleveExiste($request);
-        if (isset($eleve)) {
-            throw new IsExisteExcetion(['code' => -1, 'name' => ' eleve']);
+        $jobs = [];
+        foreach ($request->validated()['users']  as $user) {
+            $jobs[] =   new  CreateStudentUser($user, $this->eleveService);
         }
-        $classe = $this->eleveService->classeExiste($request);
-        if (is_null($classe)) {
-            throw new NotFoundException(['code' => -2, 'message' => ' classe not found ']);
-        }
-        $parent = $this->eleveService->parentExiste($request);
-        if (is_null($parent)) {
-            throw new NotFoundException(['code' => -3, 'message' => ' parent not found ']);
-        }
-        $eleve = Eleve::create($request->validated());
-        $eleve->classe()->associate($classe->id);
-        $eleve->userParent()->associate($parent->id)->save();
+         Bus::batch($jobs)->finally(function (Batch $batch) {
+            var_dump($this->batch()->progress());
+        })->dispatch();
+
+
         return response(['success' => 1, 'message' => 'eleve is create'], 201);
     }
 
@@ -105,7 +101,7 @@ class EleveController extends Controller
         if (is_null($event)) {
             throw new NotFoundException(['code' => -4, 'message' => ' event not found ']);
         }
-        
+
         $eleve->update($request->validated());
         $eleve->events()->sync($event->id);
         $eleve->classe()->associate($classe->id);
