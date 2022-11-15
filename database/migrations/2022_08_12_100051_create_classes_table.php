@@ -15,10 +15,11 @@ return new class extends Migration
     {
         Schema::create('classes', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('niveau_scolaire');
-            $table->date('debut_annee_scolaire');
-            $table->date('fin_annee_scolaire');
+            $table->string('name')->unique();
+            $table->string('debut_annee_scolaire')->nullable();
+            $table->date('fin_annee_scolaire')->nullable();
+            $table->unsignedBigInteger('niveau_id')->nullable();
+            $table->foreign('niveau_id')->references('id')->on('niveaux');
             $table->timestamps();
         });
     }

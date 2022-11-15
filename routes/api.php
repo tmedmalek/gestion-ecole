@@ -1,8 +1,20 @@
 <?php
 
+
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CalendrierController;
+use App\Http\Controllers\ClasseController;
 use App\Http\Controllers\EleveController;
+use App\Http\Controllers\EvenementController;
+use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\MatiereController;
+use App\Http\Controllers\MatiereNiveauController;
+use App\Http\Controllers\NiveauController;
+use App\Http\Controllers\NoteController;
 use App\Http\Controllers\ProfesseurController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\ResetPasswordController;
+use App\Http\Controllers\SeanceController;
+use App\Http\Controllers\UserParentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,18 +28,117 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix('eleves')->controller(EleveController::class)->group(function () {
+Route::prefix('login')->controller(AuthController::class)->group(function () {
+    Route::post('', 'login');
+});
+
+Route::prefix('logout')->controller(AuthController::class)->group(function () {
+    Route::get('', 'logout')->middleware('auth:api');
+});
+
+Route::prefix('forgot-password')->controller(ForgotPasswordController::class)->group(function () {
+    Route::post('', 'ForgotPassword');
+});
+
+
+Route::prefix('verifytoken')->controller(ForgotPasswordController::class)->group(function () {
+    Route::get('', 'Verifytoken');
+});
+
+
+Route::prefix('resetpassword')->controller(ResetPasswordController::class)->group(function () {
+    Route::post('', 'ResetPassword');
+});
+
+
+Route::prefix('eleves')->controller(EleveController::class)->middleware(['auth:api', 'scopes:admin'])->group(function () {
     Route::get('', 'index');
     Route::get('/{id}', 'show');
     Route::post('', 'store');
-    Route::patch('/{id}', 'update');
+    Route::put('/{id}', 'update');
     Route::delete('/{id}', 'destroy');
 });
 
-Route::prefix('professeurs')->controller(ProfesseurController::class)->group(function () {
+Route::prefix('professeurs')->controller(ProfesseurController::class)->middleware(['auth:api', 'scopes:admin'])->group(function () {
     Route::get('', 'index');
     Route::get('/{id}', 'show');
     Route::post('', 'store');
-    Route::patch('/{id}', 'update');
+    Route::put('/{id}', 'update');
     Route::delete('/{id}', 'destroy');
+});
+Route::prefix('parents')->controller(UserParentController::class)->middleware(['auth:api', 'scopes:admin'])->group(function () {
+    Route::get('', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('', 'store');
+    Route::put('/{id}', 'update');
+    Route::delete('/{id}', 'destroy');
+});
+
+
+Route::prefix('notes')->controller(NoteController::class)->group(function () {
+    Route::get('', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('', 'store');
+    Route::put('/{id}', 'update');
+    Route::delete('/{id}', 'destroy');
+});
+
+
+Route::prefix('classes')->controller(ClasseController::class)->middleware(['auth:api', 'scopes:admin'])->group(function () {
+    Route::put('/{id}', 'update');
+    Route::get('', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('', 'store');
+    Route::delete('/{id}', 'destroy');
+});
+
+
+Route::prefix('matieres')->controller(MatiereController::class)->middleware(['auth:api'])->group(function () {
+    Route::middleware('scopes:admin')->group(function () {
+        Route::get('', 'index');
+        Route::post('', 'store');
+        Route::put('/{id}', 'update');
+        Route::delete('/{id}', 'destroy');
+    });
+    Route::get('/{matiere}', 'show')->middleware(['scopes:admin,professeur']);
+});
+
+
+Route::prefix('evenements')->controller(EvenementController::class)->group(function () {
+    Route::get('', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('', 'store');
+    Route::put('/{id}', 'update');
+    Route::delete('/{id}', 'destroy');
+});
+
+Route::prefix('niveaux')->controller(NiveauController::class)->group(function () {
+    Route::get('', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('', 'store');
+    Route::put('/{id}', 'update');
+    Route::delete('/{id}', 'destroy');
+});
+
+
+Route::prefix('matniv')->controller(MatiereNiveauController::class)->group(function () {
+    Route::get('', 'index');
+    Route::get('/{MatiereNiveau}', 'show');
+    Route::put('/{MatiereNiveau}', 'update');
+    Route::delete('/{MatiereNiveau}', 'destroy');
+});
+
+
+Route::prefix('seances')->controller(SeanceController::class)->group(function () {
+    Route::get('', 'index');
+    Route::get('/{id}', 'show');
+    Route::put('/{id}', 'update');
+    Route::delete('/{id}', 'destroy');
+});
+
+
+Route::prefix('calendrier')->controller(CalendrierController::class)->group(function () {
+    Route::get('/{id}', 'index');
+    Route::post('', 'store');
+    Route::delete('', 'destroy');
 });

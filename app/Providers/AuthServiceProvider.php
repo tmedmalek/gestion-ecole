@@ -4,6 +4,7 @@ namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Laravel\Passport\Passport;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -23,8 +24,21 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+
+        Passport::tokensCan(
+            [
+                'place-order' => 'scope for orders',
+                'eleve' => 'scope for orders',
+                'professeur' => 'scope for orders',
+                'userparent' => 'scope for orders',
+                'admin' => 'scope for orders'
+
+            ]
+        );
         $this->registerPolicies();
 
-        //
+        if (!$this->app->routesAreCached()) {
+            Passport::routes();
+        }
     }
 }

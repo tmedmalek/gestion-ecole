@@ -7,8 +7,8 @@ use Parental\HasChildren;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
-
+use Illuminate\Support\Facades\Hash;
+use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -21,9 +21,9 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'fist_name',
+        'first_name',
         'last_name',
-        'dob',
+        'date_naissance',
         'type',
         'email',
         'password',
@@ -39,8 +39,12 @@ class User extends Authenticatable
         'city',
         'gouverneant',
         'zipcode',
-    
+        'classe_id',
+        'parent_id',
+        'matricule'
+
     ];
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -51,11 +55,15 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+
     protected $childTypes = [
         'eleve' => Eleve::class,
         'professeur' => Professeur::class,
         'userparent' => UserParent::class,
+        'admin' => Admin::class,
     ];
+
 
     /**
      * The attributes that should be cast.
@@ -64,5 +72,13 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'date_naissance' => 'datetime',
+        'annee_afectation' => 'datetime',
     ];
+
+
+    public function validateForPassportPasswordGrant($password)
+    {
+        return Hash::check($password, $this->password);
+    }
 }

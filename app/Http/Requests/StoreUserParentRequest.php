@@ -27,7 +27,7 @@ class StoreUserParentRequest extends FormRequest
         return [
             'first_name' => 'required|min:5|max:30|string',
             'last_name' => 'required|min:5|max:30|string',
-            'dob' => 'required|date',
+            'date_naissance' => 'required|date',
             'email' => 'required|email',
             'password' => 'required',
             'mobile' => 'required|numeric|digits:8',

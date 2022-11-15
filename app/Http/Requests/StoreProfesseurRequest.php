@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule as ValidationRule;
+
 
 class StoreProfesseurRequest extends FormRequest
 {
@@ -15,6 +15,7 @@ class StoreProfesseurRequest extends FormRequest
      */
     public function authorize()
     {
+        //return $this->user()->tokenCan('place-orders');
         return true;
     }
 
@@ -28,7 +29,7 @@ class StoreProfesseurRequest extends FormRequest
         return [
             'first_name' => 'required|min:5|max:30|string',
             'last_name' => 'required|min:5|max:30|string',
-            'dob' => 'required|date',
+            'date_naissance' => 'required|date',
             'email' => 'required|email',
             'password' => 'required',
             'mobile' => 'required|numeric|digits:8',
@@ -41,6 +42,8 @@ class StoreProfesseurRequest extends FormRequest
             'specialite' => 'required|min:5|max:30',
             'city' => 'required|min:5|max:30',
             'zipcode' => 'required',
+            'matieres' => 'array',
+            'matieres.*' => 'numeric',
             'gouverneant' => [
                 'required',
                 Rule::in([
@@ -57,10 +60,6 @@ class StoreProfesseurRequest extends FormRequest
                     'mednin',
                 ]),
             ],
-
-
-
-
         ];
     }
 }
